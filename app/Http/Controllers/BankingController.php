@@ -54,11 +54,11 @@ class BankingController extends Controller
 
         try{
             if($banking->save()){
-                return to_route('banking.create')->with('message', 'New bank account created successfully');
+                return to_route('banking.index')->with(['message' => 'Bank account add successfully']);
             }
         }
         catch(\Exception $e){
-            return to_route('banking.create')->with('message', 'Sorry something wrong, please try to add bank account again')->withInput();
+            return to_route('banking.create')->with(['status' => false, 'message' => 'Sorry something wrong, please try to add bank account again'])->withInput();
         }
     }
 
@@ -70,7 +70,7 @@ class BankingController extends Controller
      */
     public function show(Banking $banking)
     {
-        echo "hello world single";
+        return view('banking.show', compact('banking'));
     }
 
     /**
@@ -102,11 +102,11 @@ class BankingController extends Controller
         
         try{
             if($banking->update()){
-                return to_route('banking.edit', $banking)->with('message', 'Bank account update successfully');
+                return redirect()->back()->with(['message' => 'Bank account update successfully']);
             }
         }
         catch(\Exception $e){
-            return to_route('banking.edit', $banking)->with('message', 'Sorry something wrong, please try to update bank account again')->withInput();
+            return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, please try to update bank account again']);
         }
     }
 
@@ -118,6 +118,14 @@ class BankingController extends Controller
      */
     public function destroy(Banking $banking)
     {
-        //
+        try{
+            if($banking->delete()){
+                return redirect()->back()->with(['message' => 'Bank account deleted successfully']);
+            }
+        }
+        catch(\Exception $e){
+             //return redirect()->back()->with('message', 'Sorry something wrong, An error occurred while delete bank account');
+             return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, An error occurred while delete bank account']);
+        }
     }
 }

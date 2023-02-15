@@ -1,7 +1,7 @@
 <div class="mt-8">
   
-  @if( ! request()->routeIs('banking.create') )
-  <x-happy-button href="{{ route( 'banking.create' ) }}"  class="mr-5 bg-lime-600" bgColor="lime" iconPosition="right" >
+  @if( ! request()->routeIs('project.create') )
+  <x-happy-button href="{{ route( 'project.create' ) }}"  class="mr-5 bg-lime-600" bgColor="lime" iconPosition="right" >
     {{ __('Add Bank Account') }}
     <x-slot name="icon">
       <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-2 -mr-1"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>            
@@ -9,8 +9,8 @@
   </x-happy-button>
   @endif
 
-  @if( ! request()->routeIs('banking.index') )
-  <x-happy-button href="{{ route( 'banking.index' ) }}"  class="mr-5 bg-lime-600" bgColor="lime" iconPosition="right" >
+  @if( ! request()->routeIs('project.index') )
+  <x-happy-button href="{{ route( 'project.index' ) }}"  class="mr-5 bg-lime-600" bgColor="lime" iconPosition="right" >
     {{ __('Bank List') }}
     <x-slot name="icon">
       <svg class="w-4 h-4 ml-2 -mr-1" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">

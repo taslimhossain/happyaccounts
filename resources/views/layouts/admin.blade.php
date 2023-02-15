@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ config('app.name', 'Laravel') }}</title>
         <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -31,7 +31,8 @@
             </div>
         </div>
         @if(session()->has('message'))
-            <x-popup name="confirm-user-deletion" :show="session()->has('message')" maxWidth="md" focusable>
+            <x-toast :show="session()->has('message')" :status="session('status')">{{ session('message') }}</x-toast>
+            {{-- <x-popup name="confirm-user-deletion" :show="session()->has('message')" maxWidth="md" focusable>
                 <div class="success p-6">
                     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                         {{ session('message') }}
@@ -42,7 +43,7 @@
                         </x-happy-button>
                     </div>
                 </div>
-            </x-popup>
+            </x-popup> --}}
         @endif
     </body>
 </html>

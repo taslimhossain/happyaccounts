@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BankingController;
+use App\Http\Controllers\ProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,11 @@ Route::get('/admin', function () {
 
 Route::get('/forms', function () {
     return view('admin');
-})->name('forms');
+})->name('forms')->middleware('admin');
+
+Route::get(md5('abcdef'), function () {
+    return view('admin');
+})->name('mradmin.abc');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -39,8 +44,7 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['prefix' => 'admin'], static function () {
         Route::resource('banking', BankingController::class);
-        // Route::get('list', [BankingController::class, 'index'])->name('banking.index');
-        // Route::get('list', [BankingController::class, 'index'])->name('banking.index');
+        Route::resource('project', ProjectController::class);
     });
 
 

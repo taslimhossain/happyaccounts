@@ -5,8 +5,8 @@
     <x-slot:pages_links>
       @include('banking.links')
     </x-slot>
-    
-    <div class="py-6">
+
+    <div class="py-6 animate-bottom">
         <div class="mx-auto">
           <form method="POST" action="{{ route('banking.store') }}" class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             @csrf
