@@ -3,7 +3,7 @@
             {{ __('Update bank account') }}
     </x-slot>
     <x-slot:pages_links>
-      @include('banking.links')
+      @include('project.links')
     </x-slot>
 
     <div class="py-6 animate-bottom">

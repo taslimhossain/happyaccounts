@@ -56,7 +56,16 @@ Alpine.data('data', () => ({
     isPagesMenuOpen: false,
     togglePagesMenu() {
       this.isPagesMenuOpen = !this.isPagesMenuOpen
+      this.is_banking_index = !this.is_banking_index
     },
+
+    toogleMenu($key) {
+      this[$key] = !this[$key];
+    },
+
+
+
+
     // Modal
     isModalOpen: false,
     trapCleanup: null,

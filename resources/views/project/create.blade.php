@@ -1,9 +1,9 @@
 <x-admin-layout>
     <x-slot:page_title>
-            {{ __('Add New Bank') }}
+            {{ __('Add New Project') }}
     </x-slot>
     <x-slot:pages_links>
-      @include('banking.links')
+      @include('project.links')
     </x-slot>
 
     <div class="py-6 animate-bottom">
@@ -12,19 +12,19 @@
             @csrf
               <div class="grid grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <div class="col-span-12 sm:col-span-4">
-                    <x-input-label for="bank_name" :value="__('Bank Name')" />
-                    <x-text-input id="bank_name" class="block mt-1 w-full" type="text" name="bank_name" placeholder="Mutual Trust Bank" :value="old('bank_name')" required autofocus />
-                    <x-input-error :messages="$errors->get('bank_name')" class="mt-2" />
+                    <x-input-label for="project_title" :value="__('Project title')" />
+                    <x-text-input id="project_title" class="block mt-1 w-full" type="text" name="project_title" placeholder="themehappy project" :value="old('project_title')" required autofocus />
+                    <x-input-error :messages="$errors->get('project_title')" class="mt-2" />
                 </div>
                 <div class="col-span-12 sm:col-span-4">
-                    <x-input-label for="branch" :value="__('Branch')" />
-                    <x-text-input id="branch" class="block mt-1 w-full" type="text" name="branch" placeholder="Aggrabad Chittagong" :value="old('branch')" required autofocus />
-                    <x-input-error :messages="$errors->get('branch')" class="mt-2" />
+                    <x-input-label for="start_date" :value="__('Start date')" />
+                    <x-text-input id="start_date" class="block mt-1 w-full" type="text" name="start_date" placeholder="dd/mm/yyyy" :value="old('start_date')" required autofocus />
+                    <x-input-error :messages="$errors->get('start_date')" class="mt-2" />
                 </div>
                 <div class="col-span-12 sm:col-span-4">
-                    <x-input-label for="account_name" :value="__('Account Name')" />
-                    <x-text-input id="account_name" class="block mt-1 w-full" type="text" name="account_name" placeholder="Theme Happy" :value="old('account_name')" required autofocus />
-                    <x-input-error :messages="$errors->get('account_name')" class="mt-2" />
+                    <x-input-label for="end_date" :value="__('End date')" />
+                    <x-text-input id="end_date" class="block mt-1 w-full" type="text" name="end_date" placeholder="dd/mm/yyyy" :value="old('end_date')" required autofocus />
+                    <x-input-error :messages="$errors->get('end_date')" class="mt-2" />
                 </div>
               </div>
 
@@ -35,10 +35,22 @@
                     <x-text-input id="account_number" class="block mt-1 w-full" type="text" name="account_number" placeholder="001122334455667788" :value="old('account_number')" required autofocus />
                     <x-input-error :messages="$errors->get('account_number')" class="mt-2" />
                 </div>
+
                 <div class="col-span-12 sm:col-span-4">
-                    <x-input-label for="initial_balance" :value="__('Initial Balance')" />
-                    <x-text-input id="initial_balance" class="block mt-1 w-full" type="text" name="initial_balance" placeholder="100" :value="old('initial_balance')" required autofocus />
-                    <x-input-error :messages="$errors->get('initial_balance')" class="mt-2" />
+                    <x-input-label for="project_price" :value="__('Project price')" />
+                    <x-text-input id="project_price" class="block mt-1 w-full" type="text" name="project_price" placeholder="100" :value="old('project_price')" required autofocus />
+                    <x-input-error :messages="$errors->get('project_price')" class="mt-2" />
+                </div>
+
+                <div class="col-span-12 sm:col-span-4">
+                    <x-input-label for="status" :value="__('Status')" />
+                    <select name="status" class="rounded-md shadow-sm block mt-1 w-full text-sm dark:text-gray-300 border-gray-300 dark:border-gray-300 dark:bg-gray-700 form-select focus:border-indigo-400 focus:outline-none focus:shadow-outline-indigo dark:focus:shadow-outline-gray">
+                      <option value="canceled">Canceled</option>
+                      <option value="finished">Finished</option>
+                      <option value="in_progress">In Progress</option>
+                      <option value="not_started">Not Started</option>
+                    </select>
+
                 </div>
               </div>
 

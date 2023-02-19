@@ -1,9 +1,9 @@
 <x-admin-layout>
     <x-slot:page_title>
-      <span class="text-gray-500"> Account Details: </span> {{ __( $banking->account_name) }} 
+      <span class="text-gray-500"> Project Details: </span> {{ __( $banking->account_name) }} 
     </x-slot>
     <x-slot:pages_links>
-      @include('banking.links')
+      @include('project.links')
     </x-slot>
 
     <div class="py-6 animate-bottom">
