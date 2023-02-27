@@ -94,7 +94,23 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $request->validated();
+        $project->project_title = $request->get('project_title');
+        $project->start_date    = $request->get('start_date');
+        $project->end_date      = $request->get('end_date');
+        $project->client        = $request->get('client');
+        $project->project_price = $request->get('project_price');
+        $project->status        = $request->get('status');
+        $project->description   = $request->get('description');
+
+        try{
+            if($project->update()){
+                return redirect()->back()->with(['message' => 'Success! Your project has been updated.']);
+            }
+        }
+        catch(\Exception $e){
+            return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, please try to update project again'])->withInput();
+        }
     }
 
     /**

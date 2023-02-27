@@ -9,6 +9,16 @@ class Project extends Model
 {
     use HasFactory;
 
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
+    public function getPerPage()
+    {
+        return 15;
+    }
+
     public function setStartDateAttribute($value)
     {
         $this->attributes['start_date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
@@ -16,8 +26,7 @@ class Project extends Model
 
     public function getStartDateAttribute()
     {
-  
-        return $this->attributes['start_date'] = Carbon::createFromFormat('Y-m-d', $this->attributes['start_date'])->format('d/m/Y');
+        return Carbon::createFromFormat('Y-m-d', $this->attributes['start_date'])->format('d/m/Y');
     }
 
     public function setEndDateAttribute($value)
@@ -27,7 +36,7 @@ class Project extends Model
 
     public function getEndDateAttribute()
     {
-        return $this->attributes['end_date'] = Carbon::createFromFormat('Y-m-d', $this->attributes['end_date'])->format('d/m/Y');
+        return Carbon::createFromFormat('Y-m-d', $this->attributes['end_date'])->format('d/m/Y');
     }
 
 }

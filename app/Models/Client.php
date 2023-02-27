@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Banking extends Model
+class Client extends Model
 {
     use HasFactory;
 
@@ -13,10 +13,4 @@ class Banking extends Model
     {
         return 'uuid';
     }
-
-    // public function getPerPage()
-    // {
-    //     return 15;
-    // }
-
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BankingController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'admin'], static function () {
         Route::resource('banking', BankingController::class);
         Route::resource('project', ProjectController::class);
+        Route::resource('client', ClientController::class);
     });
 
 

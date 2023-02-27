@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('clients', function (Blueprint $table) {
+            $table->id();
+            $table->uuid('uuid')->nullable()->unique();
+            $table->string('client_name')->nullable(false);
+            $table->string('phone');
+            $table->string('phone_2');
+            $table->string('email');
+            $table->text('address');
+            $table->string('billing_name');
+            $table->string('billing_phone');
+            $table->text('billing_address');
+            $table->text('description');
+            $table->integer('status')->default(\App\Helpers\Constant::ROW_STATUS['active']);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('clients');
+    }
+};

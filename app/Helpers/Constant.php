@@ -23,4 +23,17 @@ class Constant
         ];
     }
 
+    public const ROW_STATUS = [
+        'active'    => 1,
+        'in_active' => 0
+    ];
+    
+    public static function getRowStatus(): array
+    {
+        return [
+            self::ROW_STATUS['active']    => 'Active',
+            self::ROW_STATUS['in_active'] => 'In Active'
+        ];
+    }
+
 }
