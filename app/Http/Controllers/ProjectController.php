@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Str;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
@@ -37,7 +37,30 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+
+        $request->validated();
+        do {
+            $uuid = Str::uuid()->toString();
+        } while (Project::where('uuid', $uuid)->exists());
+
+        $project                = new Project();
+        $project->uuid          = $uuid;
+        $project->project_title = $request->get('project_title');
+        $project->start_date    = $request->get('start_date');
+        $project->end_date      = $request->get('end_date');
+        $project->client        = $request->get('client');
+        $project->project_price = $request->get('project_price');
+        $project->status        = $request->get('status');
+        $project->description   = $request->get('description');
+
+        try{
+            if($project->save()){
+                return to_route('project.index')->with(['message' => 'Success! Your project has been created.']);
+            }
+        }
+        catch(\Exception $e){
+            return to_route('project.create')->with(['status' => false, 'message' => 'Sorry something wrong, please try to create project again'])->withInput();
+        }
     }
 
     /**
@@ -82,6 +105,13 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        try{
+            if($project->delete()){
+                return redirect()->back()->with(['message' => 'Project deleted successfully']);
+            }
+        }
+        catch(\Exception $e){
+             return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, An error occurred while delete Project']);
+        }
     }
 }

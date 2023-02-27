@@ -8,7 +8,7 @@
 
     <div class="py-6 animate-bottom">
         <div class="mx-auto">
-          <form method="POST" action="{{ route('banking.store') }}" class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <form method="POST" action="{{ route('project.store') }}" class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             @csrf
               <div class="grid grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <div class="col-span-12 sm:col-span-4">
@@ -31,9 +31,9 @@
               <div class="grid grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
   
                 <div class="col-span-12 sm:col-span-4">
-                    <x-input-label for="account_number" :value="__('Account No')" />
-                    <x-text-input id="account_number" class="block mt-1 w-full" type="text" name="account_number" placeholder="001122334455667788" :value="old('account_number')" required autofocus />
-                    <x-input-error :messages="$errors->get('account_number')" class="mt-2" />
+                    <x-input-label for="client" :value="__('Client')" />
+                    <x-text-input id="client" class="block mt-1 w-full" type="text" name="client" placeholder="001122334455667788" :value="old('client')" required autofocus />
+                    <x-input-error :messages="$errors->get('client')" class="mt-2" />
                 </div>
 
                 <div class="col-span-12 sm:col-span-4">
@@ -44,13 +44,20 @@
 
                 <div class="col-span-12 sm:col-span-4">
                     <x-input-label for="status" :value="__('Status')" />
-                    <select name="status" class="rounded-md shadow-sm block mt-1 w-full text-sm dark:text-gray-300 border-gray-300 dark:border-gray-300 dark:bg-gray-700 form-select focus:border-indigo-400 focus:outline-none focus:shadow-outline-indigo dark:focus:shadow-outline-gray">
-                      <option value="canceled">Canceled</option>
-                      <option value="finished">Finished</option>
-                      <option value="in_progress">In Progress</option>
-                      <option value="not_started">Not Started</option>
-                    </select>
-
+                    <x-select-input name="status">
+                      @foreach(\App\Helpers\Constant::getProjectStatus() as $value => $label)
+                      <option value="{{ $value }}" {{ old('status') != $value ?: 'selected' }}>{{ $label }}</option>
+                      @endforeach
+                    </x-select-input>
+                    <x-input-error :messages="$errors->get('status')" class="mt-2" />
+                </div>
+              </div>
+              <div class="grid grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+                <div class="col-span-12 sm:col-span-12">
+                  <x-input-label for="status" :value="__('Description')" />
+                  <x-textarea-input name="description" rows="3" placeholder="Enter some long form content.">
+                  {{ old('client') }}
+                  </x-textarea-input>
                 </div>
               </div>
 
