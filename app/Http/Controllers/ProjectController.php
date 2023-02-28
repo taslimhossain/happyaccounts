@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Str;
 use App\Models\Project;
+use App\Models\Expenses_categories;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 
@@ -130,4 +131,16 @@ class ProjectController extends Controller
              return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, An error occurred while delete Project']);
         }
     }
+
+    /**
+     * Display a expenses categories.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function expensesCategories()
+    {
+        $expenses_categories = Expenses_categories::where('expenses_for', '=', 'project')->latest()->paginate();
+        return view('expenses_categories.index', compact('expenses_categories'));
+    }
+
 }

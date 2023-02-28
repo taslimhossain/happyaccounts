@@ -5,6 +5,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BankingController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\VendorController;
+use App\Http\Controllers\ExpensesCategories;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,8 +48,13 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['prefix' => 'admin'], static function () {
         Route::resource('banking', BankingController::class);
+        Route::get('project/expenses_categorie', [ProjectController::class, 'expensesCategories'])->name('project.expenses_categorie');
         Route::resource('project', ProjectController::class);
         Route::resource('client', ClientController::class);
+        Route::resource('staff', StaffController::class);
+        Route::resource('vendor', VendorController::class);
+        
+        Route::resource('expenses_categorie', ExpensesCategories::class);
     });
 
 

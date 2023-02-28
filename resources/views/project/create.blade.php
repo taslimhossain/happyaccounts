@@ -54,9 +54,9 @@
               </div>
               <div class="grid grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <div class="col-span-12 sm:col-span-12">
-                  <x-input-label for="status" :value="__('Description')" />
+                  <x-input-label for="description" :value="__('Description')" />
                   <x-textarea-input name="description" rows="3" placeholder="Enter some long form content.">
-                  {{ old('client') }}
+                  {{ old('description') }}
                   </x-textarea-input>
                 </div>
               </div>

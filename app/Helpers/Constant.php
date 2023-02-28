@@ -25,7 +25,7 @@ class Constant
 
     public const ROW_STATUS = [
         'active'    => 1,
-        'in_active' => 0
+        'in_active' => 2
     ];
     
     public static function getRowStatus(): array
