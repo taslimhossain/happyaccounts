@@ -19,6 +19,14 @@ class Project extends Model
         return 15;
     }
 
+    /**
+     * Get the client .
+     */
+    public function client_details()
+    {
+        return $this->belongsTo(Client::class, 'client', 'id');
+    }
+
     public function setStartDateAttribute($value)
     {
         $this->attributes['start_date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');

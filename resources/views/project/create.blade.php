@@ -32,7 +32,12 @@
   
                 <div class="col-span-12 sm:col-span-4">
                     <x-input-label for="client" :value="__('Client')" />
-                    <x-text-input id="client" class="block mt-1 w-full" type="text" name="client" placeholder="001122334455667788" :value="old('client')" required autofocus />
+                    <x-select-input name="client" required>
+                      <option>Select client</option>
+                      @foreach($clients as $client)
+                      <option value="{{ $client->id }}" {{ old('client') != $client->id ?: 'selected' }}>{{ $client->client_name }}</option>
+                      @endforeach
+                    </x-select-input>
                     <x-input-error :messages="$errors->get('client')" class="mt-2" />
                 </div>
 

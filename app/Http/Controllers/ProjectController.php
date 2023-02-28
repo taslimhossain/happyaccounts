@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Str;
 use App\Models\Project;
+use App\Models\Client;
 use App\Models\Expenses_categories;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
@@ -16,7 +18,12 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::latest()->paginate();
+        // $newproducts = Project::join('expenses_categories', 'projects.client', '=', 'expenses_categories.id')
+        // ->select('projects.*', 'expenses_categories.name as category_name')
+        // ->get();
+
+        
+        $projects = Project::with('client_details')->latest()->paginate();
         return view('project.index', compact('projects'));
     }
 
@@ -27,7 +34,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('project.create');
+        $clients = Client::active()->get();
+        return view('project.create', compact('clients'));
     }
 
     /**
@@ -72,6 +80,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        $project = Project::with('client_details')->findOrFail($project->id);
         return view('project.show', compact('project'));
     }
 
@@ -83,7 +92,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('project.edit', compact('project'));
+        $clients = Client::active()->get();
+        return view('project.edit', compact('project','clients'));
     }
 
     /**

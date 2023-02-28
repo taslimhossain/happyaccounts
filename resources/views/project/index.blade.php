@@ -28,7 +28,7 @@
                     @forelse($projects as $project)
                       <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-2 text-sm"><p class="font-bold">{{ $project->project_title }}</p> </td>
-                        <td class="px-4 py-2 text-sm"> {{ $project->client }} </td>
+                        <td class="px-4 py-2 text-sm"> {{ $project?->client_details?->client_name ? $project->client_details->client_name : '- - - -' }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $project->start_date }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $project->end_date }} </td>
                         <td class="px-4 py-2 text-xs">
