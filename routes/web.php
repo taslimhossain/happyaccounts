@@ -9,6 +9,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ExpensesCategories;
 use App\Http\Controllers\ProjectTransactionController;
+use App\Http\Controllers\ClientTransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,8 +52,14 @@ Route::middleware('auth')->group(function () {
         Route::resource('banking', BankingController::class);
         Route::get('project/expenses_categorie', [ProjectController::class, 'expensesCategories'])->name('project.expenses_categorie');
         Route::get('project/transaction', [ProjectController::class, 'expensesCategories'])->name('project.transaction');
+        
+        Route::get('project/{uuid}/client-transaction', [ProjectController::class, 'transactionWithClient'])->name('project.uuid.client-transaction');
+        Route::post('project/client-transaction/store', [ClientTransactionController::class, 'store'])->name('project.client-transaction.store');
+
         Route::resource('project', ProjectController::class);
-        Route::resource('project-transaction', ProjectTransactionController::class);
+        Route::resource('project.transaction', ProjectTransactionController::class);
+
+
 
         Route::resource('client', ClientController::class);
         Route::resource('staff', StaffController::class);

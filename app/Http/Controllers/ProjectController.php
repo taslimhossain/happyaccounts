@@ -6,11 +6,26 @@ use Illuminate\Support\Str;
 use App\Models\Project;
 use App\Models\Client;
 use App\Models\Expenses_categories;
+use App\Models\Vendor;
+use App\Models\Banking;
+
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 
 class ProjectController extends Controller
 {
+
+    /*
+    * Get project details here
+    *
+    * @return \App\Models\Project
+    */
+    protected function getProject()
+    {
+        $project_uuid = request()->route('uuid');
+        return Project::where('uuid', $project_uuid)->firstOrFail();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,11 +33,11 @@ class ProjectController extends Controller
      */
     public function index()
     {
+
         // $newproducts = Project::join('expenses_categories', 'projects.client', '=', 'expenses_categories.id')
         // ->select('projects.*', 'expenses_categories.name as category_name')
         // ->get();
 
-        
         $projects = Project::with('client_details')->latest()->paginate();
         return view('project.index', compact('projects'));
     }
@@ -151,6 +166,21 @@ class ProjectController extends Controller
     {
         $expenses_categories = Expenses_categories::where('expenses_for', '=', 'project')->latest()->paginate();
         return view('expenses_categories.index', compact('expenses_categories'));
+    }
+
+    /**
+     * Display client transaction form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function transactionWithClient()
+    {
+        $project           = $this->getProject();
+        $clients           = Client::active()->get();
+        $vendors           = Vendor::active()->get();
+        $expenses_cateogry = Expenses_categories::active()->get();
+        $bankings          = Banking::active()->get();
+        return view('project.transaction.transaction-client', compact('project','clients','vendors', 'expenses_cateogry', 'bankings'));
     }
 
 }

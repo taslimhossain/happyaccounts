@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('account_name')->nullable(false);
             $table->string('account_number');
             $table->float('initial_balance', 10, 0)->unsigned()->default(0);
-            $table->enum('status', array('0','1'))->default(1);
+            $table->integer('status')->default(\App\Helpers\Constant::ROW_STATUS['active']);
             $table->timestamps();
         });
     }

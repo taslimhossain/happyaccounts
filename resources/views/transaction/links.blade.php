@@ -22,7 +22,6 @@
 
 
   @if( request()->routeIs('project.show') )
-
   <x-happy-button href="{{ route('project.transaction.index', $project) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
     {{ __('Transaction List') }}
     <x-slot name="icon">
@@ -36,14 +35,6 @@
   @if( request()->routeIs('project.show') )
   <x-happy-button href="{{ route('project.transaction.create', $project) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
     {{ __('Create transaction') }}
-    <x-slot name="icon">
-      <svg class="w-4 h-4 ml-2 -mr-1" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-        <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
-      </svg>                    
-    </x-slot>
-  </x-happy-button>
-  <x-happy-button href="{{ route('project.uuid.client-transaction', $project) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
-    {{ __('Create client transaction') }}
     <x-slot name="icon">
       <svg class="w-4 h-4 ml-2 -mr-1" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
         <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>

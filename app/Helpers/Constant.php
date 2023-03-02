@@ -36,4 +36,45 @@ class Constant
         ];
     }
 
+
+    public const PROJECT_TRANSACTIONS = [
+        'tranaction'         => 0,
+        'pay_to_vendor'      => 1,
+        'return_from_vendor' => 2,
+        'get_from_client'    => 3,
+        'return_to_client'   => 4,
+    ];
+    
+    public static function getProjectTransactions(): array
+    {
+        return [
+            self::PROJECT_TRANSACTIONS['tranaction']            => 'Simple tranaction',
+            self::PROJECT_TRANSACTIONS['pay_to_vendor']         => 'Pay to vendor',
+            self::PROJECT_TRANSACTIONS['return_from_vendor']    => 'Get return from vendor',
+            self::PROJECT_TRANSACTIONS['get_from_client']       => 'Get payment from client',
+            self::PROJECT_TRANSACTIONS['return_to_client']      => 'Pay return to client',
+        ];
+    }
+
+    // public const PROJECT_TRANSACTIONS = [
+    //     'tranaction'         => 0,
+    //     'pay_to_client'      => 1,
+    //     'return_from_client' => 2,
+    //     'found_transfer'     => 3,
+    //     'cash_withdrawal'    => 4,
+    //     'bank_deposit'       => 5
+    // ];
+    
+    // public static function getProjectTransactions(): array
+    // {
+    //     return [
+    //         self::PROJECT_TRANSACTIONS['tranaction']         => 'Simple tranaction',
+    //         self::PROJECT_TRANSACTIONS['pay_to_client']      => 'Pay to client',
+    //         self::PROJECT_TRANSACTIONS['return_from_client'] => 'Get return from client',
+    //         self::PROJECT_TRANSACTIONS['found_transfer']     => 'Found Transfer',
+    //         self::PROJECT_TRANSACTIONS['cash_withdrawal']    => 'Cash withdrawal',
+    //         self::PROJECT_TRANSACTIONS['bank_deposit']       => 'Bank deposit'
+    //     ];
+    // }
+
 }

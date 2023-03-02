@@ -47,4 +47,14 @@ class Project extends Model
         return Carbon::createFromFormat('Y-m-d', $this->attributes['end_date'])->format('d/m/Y');
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', \App\Helpers\Constant::ROW_STATUS['active']);
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('status', \App\Helpers\Constant::ROW_STATUS['in_active']);
+    }
+
 }

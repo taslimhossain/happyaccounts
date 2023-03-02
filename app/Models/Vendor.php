@@ -13,4 +13,15 @@ class Vendor extends Model
     {
         return 'uuid';
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', \App\Helpers\Constant::ROW_STATUS['active']);
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('status', \App\Helpers\Constant::ROW_STATUS['in_active']);
+    }
+
 }
