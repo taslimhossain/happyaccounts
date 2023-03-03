@@ -16,6 +16,9 @@
                   <x-input-label for="transaction_type" :value="__('Transaction type')" />
                   <x-select-input name="transaction_type">
                     @foreach(\App\Helpers\Constant::getProjectTransactions() as $value => $label)
+                    @if(in_array($value, array(3,4)))
+                      @continue
+                    @endif;
                     <option value="{{ $value }}" {{ old('transaction_type') != $value ?: 'selected' }}>{{ $label }}</option>
                     @endforeach
                   </x-select-input>
@@ -32,14 +35,6 @@
                   </x-select-input>
                   <x-input-error :messages="$errors->get('vendor')" class="mt-2" />
 
-                  <x-input-label for="client" :value="__('Client')" />
-                  <x-select-input name="client" required>
-                    <option>Select client</option>
-                    @foreach($clients as $client)
-                    <option value="{{ $client->id }}" {{ old('client') != $client->id ?: 'selected' }}>{{ $client->client_name }}</option>
-                    @endforeach
-                  </x-select-input>
-                  <x-input-error :messages="$errors->get('client')" class="mt-2" />
 
                 </div>
 
@@ -55,9 +50,14 @@
                   <x-input-error :messages="$errors->get('account')" class="mt-2" />
                 </div>
                 <div class="col-span-12 sm:col-span-4">
-                    <x-input-label for="start_date" :value="__('Start date')" />
-                    <x-text-input id="start_date" class="block mt-1 w-full" type="text" name="start_date" placeholder="dd/mm/yyyy" :value="old('start_date')" required autofocus />
-                    <x-input-error :messages="$errors->get('start_date')" class="mt-2" />
+                  <x-input-label for="expenses_type" :value="__('Expenses type')" />
+                  <x-select-input name="expenses_type" required>
+                    <option>Select client</option>
+                    @foreach($expenses_cateogrys as $expenses_cateogry)
+                    <option value="{{ $expenses_cateogry->id }}" {{ old('expenses_type') != $expenses_cateogry->id ?: 'selected' }}>{{ $expenses_cateogry->name }}</option>
+                    @endforeach
+                  </x-select-input>
+                  <x-input-error :messages="$errors->get('expenses_type')" class="mt-2" />
                 </div>
                 <div class="col-span-12 sm:col-span-4">
                     <x-input-label for="end_date" :value="__('End date')" />

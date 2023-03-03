@@ -45,9 +45,9 @@ class ProjectTransactionController extends Controller
         $project = $this->project();
         $clients = Client::active()->get();
         $vendors = Vendor::active()->get();
-        $expenses_cateogry = Expenses_categories::active()->get();
+        $expenses_cateogrys = Expenses_categories::where('expenses_for', 'project')->active()->get();
         $bankings = Banking::active()->get();
-        return view('transaction.create', compact('project','clients','vendors', 'expenses_cateogry', 'bankings'));
+        return view('transaction.create', compact('project','clients','vendors', 'expenses_cateogrys', 'bankings'));
     }
 
     /**

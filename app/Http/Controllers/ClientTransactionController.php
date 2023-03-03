@@ -23,24 +23,21 @@ class ClientTransactionController extends Controller
      */
     public function store(StoreClientTransactionRequest $request)
     {
-        dd($request->all());
+
+
         $request->validated();
         // Get the current user id
         $user_id = Auth::id();
         $request->merge(['user_id' => $user_id]);
 
         do {
-            $uuid = Str::uuid()->getInteger();
-        } while (ProjectTransaction::where('uuid', $uuid)->exists() || OtherModel::where('uuid', $uuid)->exists());
-
-
-        do {
-            $uuid = Str::uuid()->getInteger();
+            $uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
         } while (ProjectTransaction::where('uuid', $uuid)->exists());
 
         $project_transaction                = new ProjectTransaction();
         $project_transaction->uuid          = $uuid;
-        $project_transaction->project_title = $request->get('project_title');
+        // $project_transaction->title = $request->get('hello world text');
+        // $project_transaction->particulars = $request->get('hello world particulars');
         $project_transaction->reference     = $request->get('reference');
         $project_transaction->note          = $request->get('note');
         $project_transaction->user_id       = intval($request->get('user_id'));
@@ -48,30 +45,33 @@ class ClientTransactionController extends Controller
         $project_transaction->client_id     = intval($request->get('client_id'));
         $project_transaction->banking_id    = intval($request->get('account'));
 
-        dd($project_transaction);
-        dd($request->all());
+        // dd($project_transaction);
+        // dd($request->all());
 
 
 
-        DB::beginTransaction();
+       // DB::beginTransaction();
 
         try {
-            $transaction_client->save();
-            $transaction_bank->save();
-            $transaction_vendor->save();
+
+            if($project_transaction->save()){
+                return to_route('project.index')->with(['message' => 'Success! Transaction has been created.']);
+            }
+
+            // $transaction_bank->save();
+            // $transaction_vendor->save();
         
-            DB::commit();
+            //DB::commit();
             
-            // all three transactions were saved successfully
-            return 'Success!';
+
         } catch (\Exception $e) {
-            DB::rollback();
+            return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, please try to create ransaction again'])->withInput();
+
+            // DB::rollback();
         
-            // there was an error saving one or more transactions, so roll back
-            // and delete the previously saved items
-            $transaction_client->delete();
-            $transaction_bank->delete();
-            $transaction_vendor->delete();
+            // $transaction_client->delete();
+            // $transaction_bank->delete();
+            // $transaction_vendor->delete();
         
             return 'Error: ' . $e->getMessage();
         }
