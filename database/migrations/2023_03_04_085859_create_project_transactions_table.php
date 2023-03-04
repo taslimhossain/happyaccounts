@@ -15,7 +15,9 @@ return new class extends Migration
     {
         Schema::create('project_transactions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->nullable()->unique();
+            $table->uuid('uuid')->nullable(false)->unique();
+            $table->unsignedBigInteger('global_transaction_id');
+            $table->foreign('global_transaction_id')->references('id')->on('global_transactions')->onDelete('cascade');
             $table->string('reference')->nullable();
             $table->integer('title')->default(\App\Helpers\Constant::PROJECT_TRANSACTIONS['tranaction']);
             $table->text('particulars')->nullable();
@@ -29,7 +31,6 @@ return new class extends Migration
             $table->double('credit_amount')->default(0);
             $table->double('balance')->default(0);
             $table->text('note')->nullable();
-            $table->json('trans_history')->nullable();
             $table->enum('trans_type', array('debit','credit'))->nullable(false);
             $table->dateTime('trans_time')->default(now());
             $table->date('trans_date')->default(now());

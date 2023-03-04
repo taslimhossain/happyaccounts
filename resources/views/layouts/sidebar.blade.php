@@ -27,7 +27,8 @@
           'index'  => array( 'name'   => 'Bank list', 'slug'   => 'banking.index', 'access' => 'admin'),
           'create' => array( 'name'   => 'Add bank account', 'slug'   => 'banking.create', 'access' => 'admin'),
           'transfer_list' => array( 'name'   => 'Transfer list', 'slug'   => 'banking.index', 'access' => 'admin'),
-          'create_transfer' => array( 'name'   => 'Create transfer', 'slug'   => 'banking.index', 'access' => 'admin')
+          'create_transfer' => array( 'name'   => 'Create transfer', 'slug'   => 'banking.index', 'access' => 'admin'),
+          'new_deposit' => array( 'name'   => 'New deposit', 'slug'   => 'banking.deposit-transaction.create', 'access' => 'admin')
       )
     ),
     'project' => array(

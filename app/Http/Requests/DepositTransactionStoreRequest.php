@@ -1,23 +1,12 @@
 <?php
 
 namespace App\Http\Requests;
-
-
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreClientTransactionRequest extends FormRequest
+class DepositTransactionStoreRequest extends FormRequest
 {
-
-    /**
-     * Indicates whether validation should stop after the first rule failure.
-     *
-     * @var bool
-     */
-    protected $stopOnFirstFailure = true;
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -36,15 +25,13 @@ class StoreClientTransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'project_id'       => ['required','numeric','exists:projects,id'],
-            'client_id'       => ['required','numeric','exists:clients,id'],
             'account'       => ['required','numeric','exists:bankings,id'],
-            'transaction_type' => ['required', 'numeric','min:1'],
+            'transaction_type' => ['required', 'numeric','min:7', 'max:7'],
             'amount' => ['required', 'numeric','min:10'],
         ];
     }
 
-    /**
+   /**
      * Get custom messages for validator errors.
      *
      * @return array
@@ -52,17 +39,11 @@ class StoreClientTransactionRequest extends FormRequest
     public function messages()
     {
         return [
-            'project_id.required' => __('The :attribute field is required', ['attribute' => __('Project')]),
-            'project_id.numeric'  => __(':attribute id must be a number', ['attribute' => __('Project')]),
-            'project_id.exists'   => __('The selected :attribute id is invalid.', ['attribute' => __('Project')]),
 
-            'client_id.required' => __('The :attribute field is required', ['attribute' => __('Client')]),
-            'client_id.numeric'  => __(':attribute id must be a number', ['attribute' => __('Client')]),
-            'client_id.exists'   => __('The selected :attribute id is invalid.', ['attribute' => __('Client')]),
-
-            'transaction_type.required' => __('The :attribute have to select', ['attribute' => __('Transaction type')]),
+            'transaction_type.required' => __(':attribute have to select', ['attribute' => __('Transaction type')]),
             'transaction_type.numeric'  => __(':attribute field must be a number', ['attribute' => __('Transaction type')]),
-            'transaction_type.min'      => __('The :attribute have to select', ['attribute' => __('Transaction type')]),
+            'transaction_type.min'      => __(':attribute have to select', ['attribute' => __('Transaction type')]),
+            'transaction_type.max'      => __(':attribute have to select', ['attribute' => __('Transaction type')]),
 
             'account.required' => __('The :attribute have to select', ['attribute' => __('Account')]),
             'account.numeric'  => __(':attribute have to select', ['attribute' => __('Account')]),

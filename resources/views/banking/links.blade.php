@@ -20,6 +20,34 @@
   </x-happy-button>
   @endif
 
+  @if( request()->routeIs('banking.show') )
+  <x-happy-button href="{{ route('banking.uuid.deposit-transaction.create', $banking) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
+    {{ __('Deposit') }}
+    <x-slot name="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+      </svg>          
+    </x-slot>
+  </x-happy-button>
+  <x-happy-button href="{{ route('project.transaction.create', $banking) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
+    {{ __('Cash withdrawal') }}
+    <x-slot name="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
+      </svg>              
+    </x-slot>
+  </x-happy-button>
+  <x-happy-button href="{{ route('banking.deposit-transaction.list', $banking) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
+    {{ __('List view') }}
+    <x-slot name="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
+      </svg>              
+    </x-slot>
+  </x-happy-button>
+  @endif
+
+
   <x-happy-button href="{{ route( 'admin' ) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
     {{ __('Transfer List') }}
     <x-slot name="icon">

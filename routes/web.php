@@ -49,7 +49,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::group(['prefix' => 'admin'], static function () {
+
+        Route::get('banking/deposit-transaction-list', [BankingController::class, 'depositTransactionList'])->name('banking.deposit-transaction-list');
+        Route::get('banking/deposit-transaction', [BankingController::class, 'depositTransaction'])->name('banking.deposit-transaction.create');
+        Route::get('banking/{uuid}/deposit-transaction', [BankingController::class, 'depositBankTransaction'])->name('banking.uuid.deposit-transaction.create');
+
+        Route::post('banking/deposit-transaction/store', [BankingController::class, 'depositTransactionStore'])->name('banking.deposit-transaction.store');
+        
+
         Route::resource('banking', BankingController::class);
+
         Route::get('project/expenses_categorie', [ProjectController::class, 'expensesCategories'])->name('project.expenses_categorie');
         Route::get('project/transaction', [ProjectController::class, 'expensesCategories'])->name('project.transaction');
         

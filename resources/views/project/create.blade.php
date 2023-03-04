@@ -18,12 +18,12 @@
                 </div>
                 <div class="col-span-12 sm:col-span-4">
                     <x-input-label for="start_date" :value="__('Start date')" />
-                    <x-text-input id="start_date" class="block mt-1 w-full" type="text" name="start_date" placeholder="dd/mm/yyyy" :value="old('start_date')" required autofocus />
+                    <x-text-input id="start_date" class="happydate block mt-1 w-full" type="text" name="start_date" placeholder="dd/mm/yyyy" :value="old('start_date')" required autofocus />
                     <x-input-error :messages="$errors->get('start_date')" class="mt-2" />
                 </div>
                 <div class="col-span-12 sm:col-span-4">
                     <x-input-label for="end_date" :value="__('End date')" />
-                    <x-text-input id="end_date" class="block mt-1 w-full" type="text" name="end_date" placeholder="dd/mm/yyyy" :value="old('end_date')" required autofocus />
+                    <x-text-input id="end_date" class="happydate block mt-1 w-full" type="text" name="end_date" placeholder="dd/mm/yyyy" :value="old('end_date')" required autofocus />
                     <x-input-error :messages="$errors->get('end_date')" class="mt-2" />
                 </div>
               </div>
@@ -32,7 +32,7 @@
   
                 <div class="col-span-12 sm:col-span-4">
                     <x-input-label for="client" :value="__('Client')" />
-                    <x-select-input name="client" required>
+                    <x-select-input name="client" class="happyselect" required>
                       <option>Select client</option>
                       @foreach($clients as $client)
                       <option value="{{ $client->id }}" {{ old('client') != $client->id ?: 'selected' }}>{{ $client->client_name }}</option>

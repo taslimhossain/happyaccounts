@@ -1,13 +1,32 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Banking;
+use App\Models\GlobalTransaction;
+use App\Models\BankTransaction;
 use App\Http\Requests\StoreBankingRequest;
 use App\Http\Requests\UpdateBankingRequest;
+use App\Http\Requests\DepositTransactionStoreRequest;
+use App\Helpers\Constant;
 
 class BankingController extends Controller
 {
+
+    /*
+    * Get project details here
+    *
+    * @return \App\Models\Project
+    */
+    protected function getBank()
+    {
+        $bank_uuid = request()->route('uuid');
+        return Banking::where('uuid', $bank_uuid)->firstOrFail();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -128,4 +147,103 @@ class BankingController extends Controller
              return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, An error occurred while delete bank account']);
         }
     }
+
+    
+    /**
+     * Show the form for creating a new deposit transaction.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function depositBankTransaction()
+    {
+        $bank     = $this->getBank();
+        $bankings = Banking::active()->get();
+        return view('banking.transaction.transaction-deposit', compact('bankings', 'bank'));
+    }
+    /**
+     * Show the form for creating a new deposit transaction.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function depositTransaction()
+    {
+        $bankings = Banking::active()->get();
+        return view('banking.transaction.transaction-deposit', compact('bankings'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \App\Http\Requests\DepositTransactionStoreRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function depositTransactionStore(DepositTransactionStoreRequest $request)
+    {
+        // dd(Constant::getTransactions()[$request->get('transaction_type')]);
+        // dd($request->all());
+        $request->validated();
+
+        // Get the current user id
+        $user_id = Auth::id();
+        $request->merge(['user_id' => $user_id]);
+
+        // Start Global Transaction
+        do {
+            $globalTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
+        } while (GlobalTransaction::where('uuid', $globalTransaction_uuid)->exists());
+
+        $global_transaction             = new GlobalTransaction();
+        $global_transaction->uuid       = $globalTransaction_uuid;
+        $global_transaction->title      = $request->get('transaction_type');
+        $global_transaction->reference  = $request->get('reference');
+        $global_transaction->banking_id = $request->get('account');
+        $global_transaction->amount     = intval($request->get('amount'));
+        $global_transaction->trans_date = $request->get('trans_date');
+        $global_transaction->user_id    = $request->get('user_id');
+        $global_transaction->save();
+        $global_transaction_id = $global_transaction->id;
+        // End Global Transaction
+
+        // Start Global Transaction
+        do {
+            $bankTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
+        } while (BankTransaction::where('uuid', $bankTransaction_uuid)->exists());
+
+        $bank_transaction                        = new BankTransaction();
+        $bank_transaction->uuid                  = $bankTransaction_uuid;
+        $bank_transaction->global_transaction_id = $global_transaction_id;
+        $bank_transaction->reference             = $request->get('reference');
+        $bank_transaction->title                 = $request->get('transaction_type');
+        $bank_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
+        $bank_transaction->debit_amount          = 0;
+        if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['bank_deposit']){
+            $bank_transaction->credit_amount = intval($request->get('amount'));
+        }
+
+        $bank_transaction->banking_id = $request->get('account');
+        $bank_transaction->user_id    = $request->get('user_id');
+        $bank_transaction->trans_date = $request->get('trans_date');
+        $bank_transaction->note       = $request->get('note');
+        $bank_transaction->save();
+        // End Global Transaction
+
+
+        // dd($global_transaction);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function depositTransactionList()
+    {
+        //return $bankings = Banking::latest()->paginate();
+        return $transactions = BankTransaction::select('id', 'debit_amount', 'credit_amount')
+        ->addSelect(DB::raw('SUM(credit_amount - debit_amount) OVER (ORDER BY id) AS balance'))
+        ->latest()
+        ->paginate();
+    }    
+    
 }

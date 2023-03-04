@@ -1,13 +1,25 @@
 import './bootstrap';
-
 import Alpine from 'alpinejs';
+import 'flatpickr/dist/flatpickr.min.css';
+import flatpickr from 'flatpickr';
+import 'choices.js/public/assets/styles/choices.min.css';
+import Choices from 'choices.js';
+
+
+
 window.Alpine = Alpine;
 
-// Alpine.data('data', () => ({
-//     dark            : 'dark',
-//     isSideMenuOpen  : false,
-//     isPagesMenuOpen : false,
-// }))
+flatpickr('.happydate', {
+  dateFormat: "d/m/Y",
+});
+
+const happyselect = document.querySelector('.happyselect');
+if(happyselect){
+  const choices = new Choices(happyselect, {
+
+  });
+}
+
 
 function getThemeFromLocalStorage() {
     // if user already changed the theme, use it
@@ -24,7 +36,6 @@ function getThemeFromLocalStorage() {
 function setThemeToLocalStorage(value) {
     window.localStorage.setItem('dark', value)
 }
-
 Alpine.data('data', () => ({
 
 
@@ -85,5 +96,4 @@ Alpine.data('data', () => ({
 
 
 }))
-
 Alpine.start();

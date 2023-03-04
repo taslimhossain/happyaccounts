@@ -46,7 +46,7 @@ class ClientTransactionController extends Controller
         $project_transaction->banking_id    = intval($request->get('account'));
 
         // dd($project_transaction);
-        // dd($request->all());
+         dd($request->all());
 
 
 
