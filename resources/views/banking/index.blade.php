@@ -28,7 +28,7 @@
                         <td class="px-4 py-2 text-sm"> {{ $banking->account_number }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $banking->bank_name }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $banking->branch }} </td>
-                        <td class="px-4 py-2 text-sm">{{ $banking->initial_balance }}</td>
+                        <td class="px-4 py-2 text-sm">{{ intval($banking->transaction_sum_bank_transactionscredit_amount) - intval($banking->transaction_sum_bank_transactionsdebit_amount) }}</td>
                         <td class="px-4 py-2 text-xs">
                           @if($banking->status)
                           <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"> Active </span>
@@ -38,6 +38,13 @@
                         </td>
                         <td class="px-4 py-2">
                           <div class="flex items-center space-x-4 text-sm">
+                            <x-happy-button href="{{ route('banking.uuid.deposit-transaction-list', $banking) }}"  class="py-2 px-2 bg-green-600" bgColor="green" iconPosition="right" >
+                              <x-slot name="icon">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                </svg>                        
+                              </x-slot>
+                            </x-happy-button>
                             <x-happy-button href="{{ route('banking.show', $banking) }}"  class="py-2 px-2 bg-green-600" bgColor="green" iconPosition="right" >
                               <x-slot name="icon">
                                 <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>                                    

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,36 +11,52 @@ use Illuminate\Database\Eloquent\Model;
 class BankTransaction extends Model
 {
     use HasFactory;
-
-
-    // public function save(array $options = [])
-    // {
-    //     if (!$this->exists) {
-    //         $this->created_at = $this->freshTimestamp();
-    //     }
-    //     $previous_debit = $this->previousDebitAmount();
-    //     $previous_credit = $this->previousCreditAmount();
-    //     $current_debit = $this->debit_amount ?? 0;
-    //     $current_credit = $this->credit_amount ?? 0;
-    //     $this->balance = $previous_credit + $current_credit - $previous_debit - $current_debit;
-    //     return parent::save($options);
-    // }
-
-    // public function previousDebitAmount()
-    // {
-    //     return self::where('banking_id', $this->account)
-    //         ->where('created_at', '<', $this->created_at)
-    //         ->sum('debit_amount');
-    // }
-
-    // public function previousCreditAmount()
-    // {
-    //     return self::where('banking_id', $this->account)
-    //         ->where('created_at', '<', $this->created_at)
-    //         ->sum('credit_amount');
-    // }
-
     
+    public function getPerPage()
+    {
+        return 12;
+    }
+
+
+    public function scopeWithBalance($query)
+    {
+        $queryBuilder = $query->getQuery();
+        if (empty($queryBuilder->columns)) {
+            return $query->select('*')->selectRaw('SUM(credit_amount - debit_amount) OVER (ORDER BY id) AS balance');
+        } else {
+            return $query->addSelect(DB::raw('SUM(credit_amount - debit_amount) OVER (ORDER BY id) AS balance'));
+        }
+    }
+    
+    public function scopeBank($query, $bank_id)
+    {
+        if($bank_id){
+            return $query->where('banking_id', $bank_id);
+        }
+    }
+
+    public function scopeBankTransactionList($query){
+        return $query->with('globalTransaction:id,uuid')
+                    ->select('id','global_transaction_id', 'created_at', 'reference', 'uuid', 'debit_amount', 'credit_amount', 'trans_date')
+                    ->latest()
+                    ->paginate();
+                    
+    }
+
+    /**
+     * Get the Global Transaction .
+     */
+    public function globalTransaction()
+    {
+        return $this->belongsTo(GlobalTransaction::class, 'global_transaction_id', 'id');
+    }
+
+
+    public function getCreateDateAttribute()
+    {
+        return $this->created_at->format('d/m/Y');
+    }
+
     public function getTransDateAttribute()
     {
         return Carbon::createFromFormat('Y-m-d', $this->attributes['trans_date'])->format('d/m/Y');

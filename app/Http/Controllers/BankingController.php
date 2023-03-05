@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Banking;
@@ -34,7 +33,10 @@ class BankingController extends Controller
      */
     public function index()
     {
-        $bankings = Banking::latest()->paginate();
+        $bankings = Banking::withSum('Transaction', 'bank_transactions.debit_amount')
+                                    ->withSum('Transaction', 'bank_transactions.credit_amount')
+                                    ->latest()
+                                    ->paginate();
         return view('banking.index', compact('bankings'));
     }
 
@@ -148,18 +150,7 @@ class BankingController extends Controller
         }
     }
 
-    
-    /**
-     * Show the form for creating a new deposit transaction.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function depositBankTransaction()
-    {
-        $bank     = $this->getBank();
-        $bankings = Banking::active()->get();
-        return view('banking.transaction.transaction-deposit', compact('bankings', 'bank'));
-    }
+
     /**
      * Show the form for creating a new deposit transaction.
      *
@@ -168,6 +159,10 @@ class BankingController extends Controller
     public function depositTransaction()
     {
         $bankings = Banking::active()->get();
+        if (request()->route('uuid')) {
+            $bank     = $this->getBank();
+            return view('banking.transaction.transaction-deposit', compact('bankings', 'bank'));
+        }
         return view('banking.transaction.transaction-deposit', compact('bankings'));
     }
 
@@ -181,8 +176,8 @@ class BankingController extends Controller
     public function depositTransactionStore(DepositTransactionStoreRequest $request)
     {
         // dd(Constant::getTransactions()[$request->get('transaction_type')]);
-        // dd($request->all());
         $request->validated();
+        //dd($request->all());
 
         // Get the current user id
         $user_id = Auth::id();
@@ -216,9 +211,15 @@ class BankingController extends Controller
         $bank_transaction->reference             = $request->get('reference');
         $bank_transaction->title                 = $request->get('transaction_type');
         $bank_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
-        $bank_transaction->debit_amount          = 0;
+        
         if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['bank_deposit']){
+            $bank_transaction->debit_amount          = 0;
             $bank_transaction->credit_amount = intval($request->get('amount'));
+        }
+
+        if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['cash_withdrawal']){
+            $bank_transaction->credit_amount          = 0;
+            $bank_transaction->debit_amount = intval($request->get('amount'));
         }
 
         $bank_transaction->banking_id = $request->get('account');
@@ -233,17 +234,37 @@ class BankingController extends Controller
     }
 
     /**
+     * Show the form for creating a new withdraw transaction.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function withdrawTransaction()
+    {
+
+        $bankings = Banking::active()->get();
+        if (request()->route('uuid')) {
+            $bank     = $this->getBank();
+            return view('banking.transaction.transaction-withdraw', compact('bankings', 'bank'));
+        }
+        return view('banking.transaction.transaction-withdraw', compact('bankings'));
+    }
+
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function depositTransactionList()
+    public function BankTransactionList()
     {
-        //return $bankings = Banking::latest()->paginate();
-        return $transactions = BankTransaction::select('id', 'debit_amount', 'credit_amount')
-        ->addSelect(DB::raw('SUM(credit_amount - debit_amount) OVER (ORDER BY id) AS balance'))
-        ->latest()
-        ->paginate();
+
+        $transactions = BankTransaction::BankTransactionList();
+        if (request()->route('uuid')) {
+            $bank     = $this->getBank();
+            $transactions = BankTransaction::Bank($bank->id)->BankTransactionList();
+            //$transactions = BankTransaction::with('globalTransaction')->WithBalance()->Bank($bank->id)->oldest()->paginate();
+        }
+        return view('banking.transaction.transaction-list', compact('transactions'));
     }    
-    
+
 }

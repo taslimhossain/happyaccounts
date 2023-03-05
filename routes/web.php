@@ -50,12 +50,18 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['prefix' => 'admin'], static function () {
 
-        Route::get('banking/deposit-transaction-list', [BankingController::class, 'depositTransactionList'])->name('banking.deposit-transaction-list');
+        Route::get('banking/deposit-transaction-list', [BankingController::class, 'BankTransactionList'])->name('banking.deposit-transaction-list');
+
+        Route::get('banking/{uuid}/deposit-transaction-list', [BankingController::class, 'BankTransactionList'])->name('banking.uuid.deposit-transaction-list');
+
         Route::get('banking/deposit-transaction', [BankingController::class, 'depositTransaction'])->name('banking.deposit-transaction.create');
-        Route::get('banking/{uuid}/deposit-transaction', [BankingController::class, 'depositBankTransaction'])->name('banking.uuid.deposit-transaction.create');
+        Route::get('banking/{uuid}/deposit-transaction', [BankingController::class, 'depositTransaction'])->name('banking.uuid.deposit-transaction.create');
 
         Route::post('banking/deposit-transaction/store', [BankingController::class, 'depositTransactionStore'])->name('banking.deposit-transaction.store');
         
+        Route::get('banking/withdraw-transaction', [BankingController::class, 'withdrawTransaction'])->name('banking.withdraw-transaction.create');
+        Route::get('banking/{uuid}/withdraw-transaction', [BankingController::class, 'withdrawTransaction'])->name('banking.uuid.withdraw-transaction.create');
+
 
         Route::resource('banking', BankingController::class);
 

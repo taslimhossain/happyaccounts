@@ -29,7 +29,7 @@
       </svg>          
     </x-slot>
   </x-happy-button>
-  <x-happy-button href="{{ route('project.transaction.create', $banking) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
+  <x-happy-button href="{{ route('banking.uuid.withdraw-transaction.create', $banking) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
     {{ __('Cash withdrawal') }}
     <x-slot name="icon">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -37,12 +37,12 @@
       </svg>              
     </x-slot>
   </x-happy-button>
-  <x-happy-button href="{{ route('banking.deposit-transaction.list', $banking) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
-    {{ __('List view') }}
+  <x-happy-button href="{{ route('banking.uuid.deposit-transaction-list', $banking) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
+    {{ __('Transaction list') }}
     <x-slot name="icon">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
-      </svg>              
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ml-2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+      </svg>               
     </x-slot>
   </x-happy-button>
   @endif

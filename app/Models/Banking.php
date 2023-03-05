@@ -14,10 +14,21 @@ class Banking extends Model
         return 'uuid';
     }
 
-    // public function getPerPage()
-    // {
-    //     return 15;
-    // }
+    public function getPerPage()
+    {
+        return 15;
+    }
+
+    public function scopeAccountBalance($query, $bank_id){
+        $amount = $query->where('id', $bank_id)->withSum('Transaction', 'bank_transactions.debit_amount')
+        ->withSum('Transaction', 'bank_transactions.credit_amount')
+        ->first();
+        return $amount->transaction_sum_bank_transactionscredit_amount - $amount->transaction_sum_bank_transactionsdebit_amount;
+    }
+
+    public function Transaction(){
+        return $this->hasMany(BankTransaction::class, 'banking_id', 'id');
+    }
 
     public function scopeActive($query)
     {
