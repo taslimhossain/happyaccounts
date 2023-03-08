@@ -62,6 +62,10 @@ Route::middleware('auth')->group(function () {
         Route::get('banking/withdraw-transaction', [BankingController::class, 'withdrawTransaction'])->name('banking.withdraw-transaction.create');
         Route::get('banking/{uuid}/withdraw-transaction', [BankingController::class, 'withdrawTransaction'])->name('banking.uuid.withdraw-transaction.create');
 
+        Route::get('banking/transfer-transaction', [BankingController::class, 'transferTransaction'])->name('banking.transfer-transaction.create');
+
+        Route::post('banking/transfer-transaction', [BankingController::class, 'transferTransaction'])->name('banking.transfer-transaction.store');
+
 
         Route::resource('banking', BankingController::class);
 

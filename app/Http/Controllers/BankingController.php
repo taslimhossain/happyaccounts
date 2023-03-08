@@ -258,13 +258,25 @@ class BankingController extends Controller
     public function BankTransactionList()
     {
 
-        $transactions = BankTransaction::BankTransactionList();
+        $transactions = BankTransaction::with('globalTransaction')->WithBalance()->latest()->paginate();
         if (request()->route('uuid')) {
             $bank     = $this->getBank();
-            $transactions = BankTransaction::Bank($bank->id)->BankTransactionList();
-            //$transactions = BankTransaction::with('globalTransaction')->WithBalance()->Bank($bank->id)->oldest()->paginate();
+            $transactions = BankTransaction::with('globalTransaction')->WithBalance()->Bank($bank->id)->latest()->paginate();
         }
         return view('banking.transaction.transaction-list', compact('transactions'));
     }    
+
+
+    /**
+     * Show the form for creating a new transfer transaction.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function transferTransaction()
+    {
+        $bankings = Banking::active()->get();
+        return view('banking.transaction.transaction-transfer', compact('bankings'));
+    }
+
 
 }
