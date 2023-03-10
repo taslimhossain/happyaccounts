@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Banking;
@@ -10,6 +11,7 @@ use App\Models\BankTransaction;
 use App\Http\Requests\StoreBankingRequest;
 use App\Http\Requests\UpdateBankingRequest;
 use App\Http\Requests\DepositTransactionStoreRequest;
+use App\Http\Requests\TransferTransactionStoreRequest;
 use App\Helpers\Constant;
 
 class BankingController extends Controller
@@ -175,62 +177,97 @@ class BankingController extends Controller
 
     public function depositTransactionStore(DepositTransactionStoreRequest $request)
     {
-        // dd(Constant::getTransactions()[$request->get('transaction_type')]);
         $request->validated();
-        //dd($request->all());
 
         // Get the current user id
         $user_id = Auth::id();
         $request->merge(['user_id' => $user_id]);
 
-        // Start Global Transaction
-        do {
-            $globalTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
-        } while (GlobalTransaction::where('uuid', $globalTransaction_uuid)->exists());
+        // Start a database transaction
+        DB::beginTransaction();
+        try {
 
-        $global_transaction             = new GlobalTransaction();
-        $global_transaction->uuid       = $globalTransaction_uuid;
-        $global_transaction->title      = $request->get('transaction_type');
-        $global_transaction->reference  = $request->get('reference');
-        $global_transaction->banking_id = $request->get('account');
-        $global_transaction->amount     = intval($request->get('amount'));
-        $global_transaction->trans_date = $request->get('trans_date');
-        $global_transaction->user_id    = $request->get('user_id');
-        $global_transaction->save();
-        $global_transaction_id = $global_transaction->id;
-        // End Global Transaction
+            // Start Global Transaction
+            do {
+                $globalTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
+            } while (GlobalTransaction::where('uuid', $globalTransaction_uuid)->exists());
 
-        // Start Global Transaction
-        do {
-            $bankTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
-        } while (BankTransaction::where('uuid', $bankTransaction_uuid)->exists());
+            $global_transaction             = new GlobalTransaction();
+            $global_transaction->uuid       = $globalTransaction_uuid;
+            $global_transaction->title      = $request->get('transaction_type');
+            $global_transaction->reference  = $request->get('reference');
+            $global_transaction->banking_id = $request->get('account');
+            $global_transaction->amount     = intval($request->get('amount'));
+            $global_transaction->trans_date = $request->get('trans_date');
+            $global_transaction->user_id    = $request->get('user_id');
+            try{
+                if($global_transaction->save()){
+                    $global_transaction_id = $global_transaction->id;
+                }
+            } catch(\Exception $e){
+                DB::rollBack();
+                if(isset($global_transaction)){
+                    $global_transaction->delete();
+                }
+                return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong in global transaction, please try to create transfer transaction again'])->withInput();
+            }
 
-        $bank_transaction                        = new BankTransaction();
-        $bank_transaction->uuid                  = $bankTransaction_uuid;
-        $bank_transaction->global_transaction_id = $global_transaction_id;
-        $bank_transaction->reference             = $request->get('reference');
-        $bank_transaction->title                 = $request->get('transaction_type');
-        $bank_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
-        
-        if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['bank_deposit']){
-            $bank_transaction->debit_amount          = 0;
-            $bank_transaction->credit_amount = intval($request->get('amount'));
+            // End Global Transaction
+
+            // Start Global Transaction
+            do {
+                $bankTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
+            } while (BankTransaction::where('uuid', $bankTransaction_uuid)->exists());
+
+            $bank_transaction                        = new BankTransaction();
+            $bank_transaction->uuid                  = $bankTransaction_uuid;
+            $bank_transaction->global_transaction_id = $global_transaction_id;
+            $bank_transaction->reference             = $request->get('reference');
+            $bank_transaction->title                 = $request->get('transaction_type');
+            $bank_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
+            
+            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['bank_deposit']){
+                $bank_transaction->debit_amount          = 0;
+                $bank_transaction->credit_amount = intval($request->get('amount'));
+            }
+
+            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['cash_withdrawal']){
+                $bank_transaction->credit_amount          = 0;
+                $bank_transaction->debit_amount = intval($request->get('amount'));
+            }
+
+            $bank_transaction->banking_id = $request->get('account');
+            $bank_transaction->user_id    = $request->get('user_id');
+            $bank_transaction->trans_date = $request->get('trans_date');
+            $bank_transaction->note       = $request->get('note');
+
+            try{
+                $bank_transaction->save();
+            } catch(\Exception $e){
+                DB::rollBack();
+                if(isset($global_transaction)){
+                    $global_transaction->delete();
+                }
+                if(isset($bank_transaction)){
+                    $bank_transaction->delete();
+                }
+                return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong in receiver account, please try to create transfer transaction again'])->withInput();
+            }
+
+            // End From Bank Transaction
+            DB::commit();
+            return to_route('banking.transfer-transaction.create')->with(['message' => 'Success! Your money transfer transaction has been created.']);
+            // End Global Transaction
+        } catch (Exception $e) {
+            DB::rollBack();
+            if(isset($global_transaction)){
+                $global_transaction->delete();
+            }
+            if(isset($bank_transaction)){
+                $bank_transaction->delete();
+            }
+            return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, please try to create transfer transaction again'])->withInput();
         }
-
-        if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['cash_withdrawal']){
-            $bank_transaction->credit_amount          = 0;
-            $bank_transaction->debit_amount = intval($request->get('amount'));
-        }
-
-        $bank_transaction->banking_id = $request->get('account');
-        $bank_transaction->user_id    = $request->get('user_id');
-        $bank_transaction->trans_date = $request->get('trans_date');
-        $bank_transaction->note       = $request->get('note');
-        $bank_transaction->save();
-        // End Global Transaction
-
-
-        // dd($global_transaction);
     }
 
     /**
@@ -278,5 +315,134 @@ class BankingController extends Controller
         return view('banking.transaction.transaction-transfer', compact('bankings'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \App\Http\Requests\TransferTransactionStoreRequest  $request
+     * @return \Illuminate\Http\Response
+     */
 
+     public function transferTransactionStore(TransferTransactionStoreRequest $request)
+     {
+
+       $request->validated();
+
+       // Get the current user id
+       $user_id = Auth::id();
+       $request->merge(['user_id' => $user_id]);
+        // Start a database transaction
+        DB::beginTransaction();
+        try {
+            // Start Global Transaction
+            do {
+                $globalTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
+            } while (GlobalTransaction::where('uuid', $globalTransaction_uuid)->exists());
+
+            $global_transaction             = new GlobalTransaction();
+            $global_transaction->uuid       = $globalTransaction_uuid;
+            $global_transaction->title      = $request->get('transaction_type');
+            $global_transaction->reference  = $request->get('reference');
+            $global_transaction->banking_id = $request->get('account_to');
+            $global_transaction->amount     = intval($request->get('amount'));
+            $global_transaction->trans_date = $request->get('trans_date');
+            $global_transaction->user_id    = $request->get('user_id');
+            try{
+                if($global_transaction->save()){
+                    $global_transaction_id = $global_transaction->id;
+                }
+            } catch(\Exception $e){
+                DB::rollBack();
+                if(isset($global_transaction)){
+                    $global_transaction->delete();
+                }
+                return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong in global transaction, please try to create transfer transaction again'])->withInput();
+            }
+            // End Global Transaction
+
+            // Start From Bank Transaction
+            do {
+                $bankTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
+            } while (BankTransaction::where('uuid', $bankTransaction_uuid)->exists());
+
+            $bank_transaction                        = new BankTransaction();
+            $bank_transaction->uuid                  = $bankTransaction_uuid;
+            $bank_transaction->global_transaction_id = $global_transaction_id;
+            $bank_transaction->reference             = $request->get('reference');
+            $bank_transaction->title                 = $request->get('transaction_type');
+            $bank_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
+            $bank_transaction->credit_amount          = 0;
+            $bank_transaction->debit_amount = intval($request->get('amount'));
+            $bank_transaction->banking_id = $request->get('account_from');
+            $bank_transaction->user_id    = $request->get('user_id');
+            $bank_transaction->trans_date = $request->get('trans_date');
+            $bank_transaction->note       = $request->get('note');
+
+            try{
+                $bank_transaction->save();
+            } catch(\Exception $e){
+                DB::rollBack();
+                if(isset($global_transaction)){
+                    $global_transaction->delete();
+                }
+                if(isset($bank_transaction)){
+                    $bank_transaction->delete();
+                }
+                return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong in sender account transaction, please try to create transfer transaction again'])->withInput();
+            }
+
+            // End From Bank Transaction
+
+            // Start From Bank Transaction
+            do {
+                $tobankTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
+            } while (BankTransaction::where('uuid', $tobankTransaction_uuid)->exists());
+
+            $tobank_transaction                        = new BankTransaction();
+            $tobank_transaction->uuid                  = $tobankTransaction_uuid;
+            $tobank_transaction->global_transaction_id = $global_transaction_id;
+            $tobank_transaction->reference             = $request->get('reference');
+            $tobank_transaction->title                 = $request->get('transaction_type');
+            $tobank_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
+            $tobank_transaction->debit_amount          = 0;
+            $tobank_transaction->credit_amount = intval($request->get('amount'));
+            $tobank_transaction->banking_id = $request->get('account_to');
+            $tobank_transaction->user_id    = $request->get('user_id');
+            $tobank_transaction->trans_date = $request->get('trans_date');
+            $tobank_transaction->note       = $request->get('note');
+
+            try{
+                $tobank_transaction->save();
+            } catch(\Exception $e){
+                DB::rollBack();
+                if(isset($global_transaction)){
+                    $global_transaction->delete();
+                }
+                if(isset($bank_transaction)){
+                    $bank_transaction->delete();
+                }
+                if(isset($tobank_transaction)){
+                    $tobank_transaction->delete();
+                }
+                return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong in receiver account, please try to create transfer transaction again'])->withInput();
+            }
+
+            // End From Bank Transaction
+
+            DB::commit();
+            return to_route('banking.transfer-transaction.create')->with(['message' => 'Success! Your money transfer transaction has been created.']);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            if(isset($global_transaction)){
+                $global_transaction->delete();
+            }
+            if(isset($bank_transaction)){
+                $bank_transaction->delete();
+            }
+            if(isset($tobank_transaction)){
+                $tobank_transaction->delete();
+            }
+            return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, please try to create transfer transaction again'])->withInput();
+        }
+     }
 }

@@ -64,7 +64,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('banking/transfer-transaction', [BankingController::class, 'transferTransaction'])->name('banking.transfer-transaction.create');
 
-        Route::post('banking/transfer-transaction', [BankingController::class, 'transferTransaction'])->name('banking.transfer-transaction.store');
+        Route::post('banking/transfer-transaction', [BankingController::class, 'transferTransactionStore'])->name('banking.transfer-transaction.store');
 
 
         Route::resource('banking', BankingController::class);
