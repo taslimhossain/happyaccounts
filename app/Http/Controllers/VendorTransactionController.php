@@ -9,25 +9,23 @@ use Illuminate\Support\Str;
 use App\Models\ProjectTransaction;
 use App\Models\GlobalTransaction;
 use App\Models\BankTransaction;
-use App\Models\ClientTransaction;
+use App\Models\VendorTransaction;
 use App\Helpers\Constant;
-use App\Http\Requests\StoreClientTransactionRequest;
+use App\Http\Requests\StoreVendorTransactionRequest;
 
 use Illuminate\Http\Request;
 
-class ClientTransactionController extends Controller
+class VendorTransactionController extends Controller
 {
-    
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreClientTransactionRequest  $request
+     * @param  \App\Http\Requests\StoreVendorTransactionRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreClientTransactionRequest $request)
+    public function store(StoreVendorTransactionRequest $request)
     {
 
-        // dd($request->all());
         $request->validated();
         // Get the current user id
         $user_id = Auth::id();
@@ -50,8 +48,8 @@ class ClientTransactionController extends Controller
             $global_transaction->amount     = intval($request->get('amount'));
             $global_transaction->trans_date = $request->get('trans_date');
             $global_transaction->user_id    = $request->get('user_id');
-            $global_transaction->client_id  = $request->get('client_id');
-            $global_transaction->project_id            = intval($request->get('project_id'));
+            $global_transaction->vendor_id  = intval($request->get('vendor_id'));
+            $global_transaction->project_id = intval($request->get('project_id'));
 
             try{
                 if($global_transaction->save()){
@@ -77,21 +75,22 @@ class ClientTransactionController extends Controller
             $project_transaction->uuid                  = $uuid;
             $project_transaction->global_transaction_id = $global_transaction_id;
             $project_transaction->title                 = $request->get('transaction_type');
-            $project_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
+            $project_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Project transaction dev mistake';
             $project_transaction->reference             = $request->get('reference');
             $project_transaction->note                  = $request->get('note');
             $project_transaction->user_id               = intval($request->get('user_id'));
             $project_transaction->project_id            = intval($request->get('project_id'));
-            $project_transaction->client_id             = intval($request->get('client_id'));
+            $project_transaction->vendor_id             = intval($request->get('vendor_id'));
             $project_transaction->banking_id            = intval($request->get('account'));
+            $project_transaction->expenses_id           = intval($request->get('expenses_cateogry'));
 
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['get_from_client']){
+            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['return_from_vendor']){
                 $project_transaction->debit_amount          = 0;
                 $project_transaction->credit_amount = intval($request->get('amount'));
                 $project_transaction->trans_type  = 'credit';
             }
 
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['return_to_client']){
+            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['pay_to_vendor']){
                 $project_transaction->debit_amount  = intval($request->get('amount'));
                 $project_transaction->credit_amount = 0;
                 $project_transaction->trans_type  = 'debit';
@@ -126,22 +125,22 @@ class ClientTransactionController extends Controller
             $bank_transaction->title                 = $request->get('transaction_type');
             $bank_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
 
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['get_from_client']){
+            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['return_from_vendor']){
                 $bank_transaction->debit_amount  = 0;
                 $bank_transaction->credit_amount = intval($request->get('amount'));
                 $bank_transaction->trans_type  = 'credit';
             }
 
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['return_to_client']){
+            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['pay_to_vendor']){
                 $bank_transaction->debit_amount  = intval($request->get('amount'));
                 $bank_transaction->credit_amount = 0;
                 $bank_transaction->trans_type  = 'debit';
             }
 
             $bank_transaction->banking_id = $request->get('account');
-            $bank_transaction->project_id            = intval($request->get('project_id'));
+            $bank_transaction->project_id = intval($request->get('project_id'));
             $bank_transaction->user_id    = $request->get('user_id');
-            $bank_transaction->client_id  = intval($request->get('client_id'));
+            $bank_transaction->vendor_id  = intval($request->get('vendor_id'));
             $bank_transaction->trans_date = $request->get('trans_date');
             $bank_transaction->note       = $request->get('note');
 
@@ -164,38 +163,39 @@ class ClientTransactionController extends Controller
 
             // Start Client Transaction
             do {
-                $clientTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
-            } while (ClientTransaction::where('uuid', $clientTransaction_uuid)->exists());
+                $vendorTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
+            } while (VendorTransaction::where('uuid', $vendorTransaction_uuid)->exists());
 
-            $client_transaction                        = new ClientTransaction();
-            $client_transaction->uuid                  = $clientTransaction_uuid;
-            $client_transaction->global_transaction_id = $global_transaction_id;
-            $client_transaction->reference             = $request->get('reference');
-            $client_transaction->title                 = $request->get('transaction_type');
-            $client_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
+            $vendor_transaction                        = new VendorTransaction();
+            $vendor_transaction->uuid                  = $vendorTransaction_uuid;
+            $vendor_transaction->global_transaction_id = $global_transaction_id;
+            $vendor_transaction->reference             = $request->get('reference');
+            $vendor_transaction->title                 = $request->get('transaction_type');
+            $vendor_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
 
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['get_from_client']){
-                $client_transaction->debit_amount  = 0;
-                $client_transaction->credit_amount = intval($request->get('amount'));
-                $client_transaction->trans_type  = 'credit';
+            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['return_from_vendor']){
+                $vendor_transaction->debit_amount  = 0;
+                $vendor_transaction->credit_amount = intval($request->get('amount'));
+                $vendor_transaction->trans_type  = 'credit';
             }
 
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['return_to_client']){
-                $client_transaction->debit_amount  = intval($request->get('amount'));
-                $client_transaction->credit_amount = 0;
-                $client_transaction->trans_type  = 'debit';
+            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['pay_to_vendor']){
+                $vendor_transaction->debit_amount  = intval($request->get('amount'));
+                $vendor_transaction->credit_amount = 0;
+                $vendor_transaction->trans_type  = 'debit';
             }
 
-            $client_transaction->banking_id = $request->get('account');
-            $client_transaction->project_id = intval($request->get('project_id'));
-            $client_transaction->user_id    = $request->get('user_id');
-            $client_transaction->client_id  = intval($request->get('client_id'));
-            $client_transaction->trans_date = $request->get('trans_date');
-            $client_transaction->note       = $request->get('note');
+            $vendor_transaction->banking_id = $request->get('account');
+            $vendor_transaction->project_id = intval($request->get('project_id'));
+            $vendor_transaction->user_id    = $request->get('user_id');
+            $vendor_transaction->vendor_id  = intval($request->get('vendor_id'));
+            $vendor_transaction->trans_date = $request->get('trans_date');
+            $vendor_transaction->note       = $request->get('note');
 
             try{
-                $client_transaction->save();
+                $vendor_transaction->save();
             } catch(\Exception $e){
+                dd($e->getMessage());
                 DB::rollBack();
                 if(isset($global_transaction)){
                     $global_transaction->delete();
@@ -206,8 +206,8 @@ class ClientTransactionController extends Controller
                 if(isset($bank_transaction)){
                     $bank_transaction->delete();
                 }
-                if(isset($client_transaction)){
-                    $client_transaction->delete();
+                if(isset($vendor_transaction)){
+                    $vendor_transaction->delete();
                 }
                 return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong in client account, please try to create transaction again'])->withInput();
             }
@@ -227,8 +227,8 @@ class ClientTransactionController extends Controller
             if(isset($bank_transaction)){
                 $bank_transaction->delete();
             }
-            if(isset($client_transaction)){
-                $client_transaction->delete();
+            if(isset($vendor_transaction)){
+                $vendor_transaction->delete();
             }            
             return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, please try to create  transaction again'])->withInput();
         }

@@ -10,6 +10,7 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ExpensesCategories;
 use App\Http\Controllers\ProjectTransactionController;
 use App\Http\Controllers\ClientTransactionController;
+use App\Http\Controllers\VendorTransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,7 +74,12 @@ Route::middleware('auth')->group(function () {
         Route::get('project/transaction', [ProjectController::class, 'expensesCategories'])->name('project.transaction');
         
         Route::get('project/{uuid}/client-transaction', [ProjectController::class, 'transactionWithClient'])->name('project.uuid.client-transaction');
+        
+        Route::get('project/{uuid}/vendor-transaction', [ProjectController::class, 'transactionWithVendor'])->name('project.uuid.vendor-transaction');
+
         Route::post('project/client-transaction/store', [ClientTransactionController::class, 'store'])->name('project.client-transaction.store');
+
+        Route::post('project/vendor-transaction/store', [VendorTransactionController::class, 'store'])->name('project.vendor-transaction.store');
 
         Route::resource('project', ProjectController::class);
         Route::resource('project.transaction', ProjectTransactionController::class);

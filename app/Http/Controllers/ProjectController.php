@@ -177,10 +177,23 @@ class ProjectController extends Controller
     {
         $project           = $this->getProject();
         $clients           = Client::active()->get();
-        $vendors           = Vendor::active()->get();
-        $expenses_cateogry = Expenses_categories::active()->get();
         $bankings          = Banking::active()->get();
-        return view('project.transaction.transaction-client', compact('project','clients','vendors', 'expenses_cateogry', 'bankings'));
+        return view('project.transaction.transaction-client', compact('project','clients', 'bankings'));
+    }
+
+    /**
+     * Display client transaction form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function transactionWithVendor()
+    {
+        $project           = $this->getProject();
+        $clients           = Client::active()->get();
+        $vendors           = Vendor::active()->get();
+        $expenses_cateogrys = Expenses_categories::projectActive()->get();
+        $bankings          = Banking::active()->get();
+        return view('project.transaction.transaction-vendor', compact('project','clients','vendors', 'expenses_cateogrys', 'bankings'));
     }
 
 }
