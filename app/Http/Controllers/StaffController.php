@@ -41,7 +41,7 @@ class StaffController extends Controller
         do {
             $uuid = Str::uuid()->toString();
         } while (Staff::where('uuid', $uuid)->exists());
-
+        //dd($request->all());
         $staff                 = new Staff();
         $staff->uuid           = $uuid;
         $staff->name           = $request->get('name');
@@ -49,7 +49,7 @@ class StaffController extends Controller
         $staff->email          = $request->get('email');
         $staff->address        = $request->get('address');
         $staff->start_date     = $request->get('start_date');
-        $staff->end_date       = $request->get('end_date');
+        //$staff->end_date       = $request->get('end_date');
         $staff->sallery_amount = $request->get('sallery_amount');
         $staff->status         = $request->get('status');
         $staff->description    = $request->get('description');
@@ -95,16 +95,21 @@ class StaffController extends Controller
      */
     public function update(UpdateStaffRequest $request, Staff $staff)
     {
+
         $request->validated();
         $staff->name           = $request->get('name');
         $staff->phone          = $request->get('phone');
         $staff->email          = $request->get('email');
         $staff->address        = $request->get('address');
         $staff->start_date     = $request->get('start_date');
-        $staff->end_date       = $request->get('end_date');
+        if($request->get('end_date')){
+            $staff->end_date       = $request->get('end_date');
+        }
         $staff->sallery_amount = $request->get('sallery_amount');
         $staff->status         = $request->get('status');
         $staff->description    = $request->get('description');
+
+
 
         try{
             if($staff->update()){

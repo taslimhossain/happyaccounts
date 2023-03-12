@@ -8,6 +8,19 @@ use Illuminate\Http\Request;
 
 class ExpensesCategories extends Controller
 {
+
+
+    /*
+    * Get categorie details here
+    *
+    * @return \App\Models\Expenses_categories
+    */
+    protected function getCtegory()
+    {
+        $category_uuid = request()->route('uuid');
+        return Expenses_categories::where('uuid', $category_uuid)->firstOrFail();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,6 +33,17 @@ class ExpensesCategories extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function officeindex()
+    {
+        $expenses_categories = Expenses_categories::where('expenses_for', '=', 'office')->latest()->paginate();
+        return view('expenses.expenses_categories.index', compact('expenses_categories'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -27,6 +51,16 @@ class ExpensesCategories extends Controller
     public function create()
     {
         return view('expenses_categories.create');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function officecreate()
+    {
+        return view('expenses.expenses_categories.create');
     }
 
     /**
@@ -49,12 +83,12 @@ class ExpensesCategories extends Controller
 
         try{
             if($expenses_categorie->save()){
-                return to_route('expenses_categorie.index')->with(['message' => 'Success!  New category has been created.']);
+                return redirect()->back()->with(['message' => 'Success!  New category has been created.']);
             }
         }
         catch(\Exception $e){
             dd($e);
-            return to_route('expenses_categorie.create')->with(['status' => false, 'message' => 'Sorry something wrong, please try to create new category again'])->withInput();
+            return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, please try to create new category again'])->withInput();
         }
     }
 
@@ -78,6 +112,18 @@ class ExpensesCategories extends Controller
     public function edit(expenses_categories $expenses_categorie)
     {
         return view('expenses_categories.edit', compact('expenses_categorie'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\expenses_categories  $expenses_categories
+     * @return \Illuminate\Http\Response
+     */
+    public function officeedit(expenses_categories $expenses_categorie)
+    {
+        $expenses_categorie = $this->getCtegory();
+        return view('expenses.expenses_categories.edit', compact('expenses_categorie'));
     }
 
     /**

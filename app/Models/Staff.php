@@ -33,7 +33,10 @@ class Staff extends Model
 
     public function getEndDateAttribute()
     {
-        return Carbon::createFromFormat('Y-m-d', $this->attributes['end_date'])->format('d/m/Y');
+        if($this->attributes['end_date']){
+            return Carbon::createFromFormat('Y-m-d', $this->attributes['end_date'])->format('d/m/Y');
+        }
+        return $this->attributes['end_date'];
     }
 
     public function scopeActive($query)

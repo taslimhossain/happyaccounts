@@ -11,6 +11,7 @@ use App\Http\Controllers\ExpensesCategories;
 use App\Http\Controllers\ProjectTransactionController;
 use App\Http\Controllers\ClientTransactionController;
 use App\Http\Controllers\VendorTransactionController;
+use App\Http\Controllers\SalaryTransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,45 +53,36 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'admin'], static function () {
 
         Route::get('banking/deposit-transaction-list', [BankingController::class, 'BankTransactionList'])->name('banking.deposit-transaction-list');
-
         Route::get('banking/{uuid}/deposit-transaction-list', [BankingController::class, 'BankTransactionList'])->name('banking.uuid.deposit-transaction-list');
-
         Route::get('banking/deposit-transaction', [BankingController::class, 'depositTransaction'])->name('banking.deposit-transaction.create');
         Route::get('banking/{uuid}/deposit-transaction', [BankingController::class, 'depositTransaction'])->name('banking.uuid.deposit-transaction.create');
-
         Route::post('banking/deposit-transaction/store', [BankingController::class, 'depositTransactionStore'])->name('banking.deposit-transaction.store');
-        
         Route::get('banking/withdraw-transaction', [BankingController::class, 'withdrawTransaction'])->name('banking.withdraw-transaction.create');
         Route::get('banking/{uuid}/withdraw-transaction', [BankingController::class, 'withdrawTransaction'])->name('banking.uuid.withdraw-transaction.create');
-
         Route::get('banking/transfer-transaction', [BankingController::class, 'transferTransaction'])->name('banking.transfer-transaction.create');
-
         Route::post('banking/transfer-transaction', [BankingController::class, 'transferTransactionStore'])->name('banking.transfer-transaction.store');
-
-
         Route::resource('banking', BankingController::class);
-
         Route::get('project/expenses_categorie', [ProjectController::class, 'expensesCategories'])->name('project.expenses_categorie');
         Route::get('project/transaction', [ProjectController::class, 'expensesCategories'])->name('project.transaction');
-        
         Route::get('project/{uuid}/client-transaction', [ProjectController::class, 'transactionWithClient'])->name('project.uuid.client-transaction');
-        
         Route::get('project/{uuid}/vendor-transaction', [ProjectController::class, 'transactionWithVendor'])->name('project.uuid.vendor-transaction');
-
         Route::post('project/client-transaction/store', [ClientTransactionController::class, 'store'])->name('project.client-transaction.store');
-
         Route::post('project/vendor-transaction/store', [VendorTransactionController::class, 'store'])->name('project.vendor-transaction.store');
 
         Route::resource('project', ProjectController::class);
         Route::resource('project.transaction', ProjectTransactionController::class);
-
-
-
         Route::resource('client', ClientController::class);
         Route::resource('staff', StaffController::class);
         Route::resource('vendor', VendorController::class);
         
         Route::resource('expenses_categorie', ExpensesCategories::class);
+
+        Route::get('expenses/office-categorie-list', [ExpensesCategories::class, 'officeindex'])->name('expenses.office-categorie.list');
+        Route::get('expenses/office-categorie-create', [ExpensesCategories::class, 'officecreate'])->name('expenses.office-categorie.create');
+        Route::get('expenses/{uuid}/office-categorie-edit', [ExpensesCategories::class, 'officeedit'])->name('expenses.uuid.office-categorie.edit');
+        Route::resource('expenses/salary', SalaryTransactionController::class)->name('expenses.salary', ['index' => 'salary.index', 'create' => 'salary.create', 'store' => 'salary.store', 'show' => 'salary.show'
+        ]);
+        Route::resource('expenses', ExpensesCategories::class);
     });
 
 
