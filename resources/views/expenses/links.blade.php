@@ -1,5 +1,24 @@
 <div class="mt-8">
   
+  @if( ! request()->routeIs('expenses.index') )
+  <x-happy-button href="{{ route( 'expenses.index' ) }}"  class="mr-5 bg-lime-600" bgColor="lime" iconPosition="right" >
+    {{ __('Office transaction') }}
+    <x-slot name="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-2 -mr-1"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>            
+    </x-slot>
+  </x-happy-button>
+  @endif
+  
+  
+  @if( ! request()->routeIs('expenses.create') )
+  <x-happy-button href="{{ route( 'expenses.create' ) }}"  class="mr-5 bg-lime-600" bgColor="lime" iconPosition="right" >
+    {{ __('New office transaction') }}
+    <x-slot name="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-2 -mr-1"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>            
+    </x-slot>
+  </x-happy-button>
+  @endif
+  
   @if( ! request()->routeIs('expenses.office-categorie.create') )
   <x-happy-button href="{{ route( 'expenses.office-categorie.create' ) }}"  class="mr-5 bg-lime-600" bgColor="lime" iconPosition="right" >
     {{ __('Add new category') }}

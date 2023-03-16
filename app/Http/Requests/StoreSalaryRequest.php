@@ -25,10 +25,8 @@ class StoreSalaryRequest extends FormRequest
     public function rules()
     {
         return [
-            'bank_name'       => ['required', 'max:255'],
-            'account_name'    => ['required', 'max:255'],
-            'account_number'  => ['required', 'integer'],
-            'initial_balance' => ['required', 'integer'],
+            'account'         => ['required','numeric','exists:bankings,id'],
+            'amount'            => ['required', 'numeric','min:10'],
         ];
     }
 
@@ -40,8 +38,12 @@ class StoreSalaryRequest extends FormRequest
     public function messages()
     {
         return [
-            'account_number.integer' => __(':attribute must be a valid number.', ['attribute' => __('Account number')]),
-            'initial_balance.integer' => __(':attribute must be a valid amount.', ['attribute' => __('Initial balance')]),
+            'account.required' => __('The :attribute have to select', ['attribute' => __('Account')]),
+            'account.numeric'  => __(':attribute have to select', ['attribute' => __('Account')]),
+            'account.exists'   => __('The selected :attribute id is invalid.', ['attribute' => __('Account')]),
+            'amount.required' => __('The :attribute have to write', ['attribute' => __('Amount')]),
+            'amount.numeric'  => __(':attribute field must be a number', ['attribute' => __('Amount')]),
+            'amount.min'      => __('The :attribute have to be greater than or equal to  10', ['attribute' => __('Amount')])
         ];
     }
 

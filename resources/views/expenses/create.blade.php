@@ -1,14 +1,14 @@
 <x-admin-layout>
     <x-slot:page_title>
-            {{ __('Salary Transaction') }}
+            {{ __('Office Transaction') }}
     </x-slot>
     <x-slot:pages_links>
-      @include('expenses.salary.links')
+      @include('expenses.links')
     </x-slot>
 
     <div class="py-6 animate-bottom">
         <div class="mx-auto">
-          <form method="POST" action="{{ route('expenses.salary.store') }}" class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <form method="POST" action="{{ route('expenses.store') }}" class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             @csrf
               <div class="grid grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <div class="col-span-12 sm:col-span-4">
@@ -22,14 +22,14 @@
                   <x-input-error :messages="$errors->get('account')" class="mt-2" />
                 </div>
                 <div class="col-span-12 sm:col-span-4">
-                  <x-input-label for="staff_id" :value="__('Staff')" />
-                  <x-select-input name="staff_id" required>
-                    <option>Select staff</option>
-                    @foreach($staffs as $staff)
-                    <option value="{{ $staff->id }}" {{ old('staff_id') != $staff->id ?: 'selected' }}>{{ $staff->name }}</option>
+                  <x-input-label for="expenses_id" :value="__('Categorie')" />
+                  <x-select-input name="expenses_id" required>
+                    <option>Select categorie</option>
+                    @foreach($expenses_cateogrys as $expenses_cateogry)
+                    <option value="{{ $expenses_cateogry->id }}" {{ old('expenses_id') != $expenses_cateogry->id ?: 'selected' }}>{{ $expenses_cateogry->name }}</option>
                     @endforeach
                   </x-select-input>
-                  <x-input-error :messages="$errors->get('staff_id')" class="mt-2" />
+                  <x-input-error :messages="$errors->get('expenses_id')" class="mt-2" />
                 </div>
                 <div class="col-span-12 sm:col-span-4">
                     <x-input-label for="amount" :value="__('Amount')" />
@@ -55,7 +55,7 @@
                   </x-textarea-input>
                 </div>
 
-                <input type="hidden" name="transaction_type" value="{{ \App\Helpers\Constant::TRANSACTIONS['pay_salary'] }}">
+                <input type="hidden" name="transaction_type" value="{{ \App\Helpers\Constant::TRANSACTIONS['office_expenses'] }}">
               </div>
               <x-happy-button type="submit" class="">
                 {{ __('Save now') }}

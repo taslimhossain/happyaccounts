@@ -64,7 +64,9 @@ class Constant
         'return_to_client'   => 4,
         'found_transfer'     => 5,
         'cash_withdrawal'    => 6,
-        'bank_deposit'       => 7
+        'bank_deposit'       => 7,
+        'pay_salary'         => 8,
+        'office_expenses'    => 9
     ];
     
     public static function getTransactions(): array
@@ -75,9 +77,11 @@ class Constant
             self::TRANSACTIONS['return_from_vendor']    => 'Get return from vendor',
             self::TRANSACTIONS['get_from_client']       => 'Get payment from client',
             self::TRANSACTIONS['return_to_client']      => 'Pay return to client',
-            self::TRANSACTIONS['found_transfer']     => 'Found Transfer',
-            self::TRANSACTIONS['cash_withdrawal']    => 'Cash withdrawal',
-            self::TRANSACTIONS['bank_deposit']       => 'Bank deposit'
+            self::TRANSACTIONS['found_transfer']        => 'Found Transfer',
+            self::TRANSACTIONS['cash_withdrawal']       => 'Cash withdrawal',
+            self::TRANSACTIONS['bank_deposit']          => 'Bank deposit',
+            self::TRANSACTIONS['pay_salary']            => 'Pay salary',
+            self::TRANSACTIONS['office_expenses']       => 'Office Expenses'
         ];
     }
 

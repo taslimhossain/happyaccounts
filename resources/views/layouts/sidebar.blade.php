@@ -76,12 +76,12 @@
     ),
     'expenses' => array(
       'name'   => 'Expenses',
-      'slug'   => 'expenses',
+      'slug'   => 'expenses.index',
       'access' => 'admin',
       'icon'   => '<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5" /></svg>',
       'sub_mennu' => array(
-          'index'  => array( 'name'   => 'Client list', 'slug'   => 'client.index', 'access' => 'admin'),
-          'salary' => array( 'name'   => 'Salary', 'slug'   => 'salary.index', 'access' => 'admin'),
+          'office' => array( 'name'   => 'Office transaction', 'slug'   => 'expenses.index', 'access' => 'admin'),
+          'salary' => array( 'name'   => 'Salary transaction', 'slug'   => 'expenses.salary.index', 'access' => 'admin'),
           'expenses_categories' => array( 'name'   => 'Expenses Categories', 'slug'   => 'expenses.office-categorie.list', 'access' => 'admin')
       )
     ),
@@ -97,6 +97,7 @@
           <ul class="mt-6">
               @foreach ($menuItems as $key => $value)
                  @php
+                 $keyw = 'expenses';
                  $page_slug = $value['slug'] ? $value['slug'] : 'dashboard' ;
                  $toggle = isset($value['slug']) ? 'toggle_'.str_replace(".", "_", $value['slug']) : '';
                  $is_toggle = isset($value['slug']) ? 'is_'.str_replace(".", "_", $value['slug']) : '';
@@ -107,7 +108,7 @@
                         <x-slot name="icon">
                             {!! $value['icon'] !!}
                         </x-slot>
-                        {{ $value['name'] }}
+                        {{ $value['name'] }} <br>
                       </x-sidebar-link>
                       <template x-if="{{$is_toggle}}">
                         <ul x-transition:enter="transition-all ease-in-out duration-300" x-transition:enter-start="opacity-25 max-h-0" x-transition:enter-end="opacity-100 max-h-xl" x-transition:leave="transition-all ease-in-out duration-300" x-transition:leave-start="opacity-100 max-h-xl" x-transition:leave-end="opacity-0 max-h-0" class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900" aria-label="submenu">
@@ -134,10 +135,7 @@
           <ul>
             <li class="relative px-6 py-3">
               <button
-                class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                @click="togglePagesMenu"
-                aria-haspopup="true"
-              >
+                class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" @click="togglePagesMenu" aria-haspopup="true">
                 <span class="inline-flex items-center">
                   <svg
                     class="w-5 h-5"

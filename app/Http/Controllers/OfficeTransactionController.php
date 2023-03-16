@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Http\Requests\StoreSalaryRequest;
 use Illuminate\Http\Request;
-use App\Models\Staff;
+use App\Models\Expenses_categories;
 use App\Models\Banking;
 use App\Models\GlobalTransaction;
 use App\Models\OfficeTransaction;
 use App\Models\BankTransaction;
 
-class SalaryTransactionController extends Controller
+class OfficeTransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,17 +23,16 @@ class SalaryTransactionController extends Controller
      */
     public function index()
     {   
-
         $transactions = OfficeTransaction::with(['globalTransaction' => function ($query) {
             $query->select('id', 'uuid');
         }])
-         ->with(['getStaff' => function ($query) {
+         ->with(['getCategory' => function ($query) {
             $query->select('id', 'name');
         }])
-         ->salary()
+         ->office()
          ->latest()
          ->paginate();
-         return view('expenses.salary.index', compact('transactions'));
+         return view('expenses.index', compact('transactions'));
     }
 
     /**
@@ -43,10 +42,9 @@ class SalaryTransactionController extends Controller
      */
     public function create()
     {
-
-        $staffs   = Staff::active()->get();
+        $expenses_cateogrys = Expenses_categories::where('expenses_for', 'office')->active()->get();
         $bankings = Banking::active()->get();
-        return view('expenses.salary.create', compact('staffs', 'bankings'));
+        return view('expenses.create', compact('expenses_cateogrys', 'bankings'));
     }
 
     /**
@@ -57,17 +55,15 @@ class SalaryTransactionController extends Controller
      */
     public function store(StoreSalaryRequest $request)
     {
-        //dd($request->all());
         $request->validated();
         // Get the current user id
         $user_id = Auth::id();
         $request->merge(['user_id' => $user_id]);
-        $request->merge(['is_salary' => 'yes']);
+        $request->merge(['is_salary' => 'no']);
 
         // Start a database transaction
         DB::beginTransaction();
         try {
-
             // Start Global Transaction
             do {
                 $globalTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
@@ -106,15 +102,14 @@ class SalaryTransactionController extends Controller
             $office_transaction->global_transaction_id = $global_transaction_id;
             $office_transaction->title                 = $request->get('transaction_type');
             $office_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'office transaction dev mistake';
-            $office_transaction->reference  = $request->get('reference');
-            $office_transaction->note       = $request->get('note');
-            $office_transaction->user_id    = intval($request->get('user_id'));
-            $office_transaction->staff_id   = intval($request->get('staff_id'));
-            $office_transaction->banking_id = intval($request->get('account'));
-            $office_transaction->is_salary   = $request->get('is_salary');
+            $office_transaction->reference             = $request->get('reference');
+            $office_transaction->note                  = $request->get('note');
+            $office_transaction->user_id               = intval($request->get('user_id'));
+            $office_transaction->expenses_id           = intval($request->get('expenses_id'));
+            $office_transaction->banking_id            = intval($request->get('account'));
+            $office_transaction->is_salary             = $request->get('is_salary');
 
-
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['pay_salary']){
+            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['office_expenses']){
                 $office_transaction->debit_amount  = intval($request->get('amount'));
                 $office_transaction->credit_amount = 0;
                 $office_transaction->trans_type    = 'debit';
@@ -132,7 +127,7 @@ class SalaryTransactionController extends Controller
                 if(isset($office_transaction)){
                     $office_transaction->delete();
                 }
-                return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong in salary transaction, please try to create transaction again'])->withInput();
+                return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong in office transaction, please try to create transaction again'])->withInput();
             }
 
             // Start Bank Transaction
@@ -147,7 +142,7 @@ class SalaryTransactionController extends Controller
             $bank_transaction->title                 = $request->get('transaction_type');
             $bank_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
 
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['pay_salary']){
+            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['office_expenses']){
                 $bank_transaction->debit_amount  = intval($request->get('amount'));
                 $bank_transaction->credit_amount = 0;
                 $bank_transaction->trans_type  = 'debit';

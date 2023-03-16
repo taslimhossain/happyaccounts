@@ -12,6 +12,7 @@ use App\Http\Controllers\ProjectTransactionController;
 use App\Http\Controllers\ClientTransactionController;
 use App\Http\Controllers\VendorTransactionController;
 use App\Http\Controllers\SalaryTransactionController;
+use App\Http\Controllers\OfficeTransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +24,6 @@ use App\Http\Controllers\SalaryTransactionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
 
 
 
@@ -80,11 +79,13 @@ Route::middleware('auth')->group(function () {
         Route::get('expenses/office-categorie-list', [ExpensesCategories::class, 'officeindex'])->name('expenses.office-categorie.list');
         Route::get('expenses/office-categorie-create', [ExpensesCategories::class, 'officecreate'])->name('expenses.office-categorie.create');
         Route::get('expenses/{uuid}/office-categorie-edit', [ExpensesCategories::class, 'officeedit'])->name('expenses.uuid.office-categorie.edit');
-        Route::resource('expenses/salary', SalaryTransactionController::class)->name('expenses.salary', ['index' => 'salary.index', 'create' => 'salary.create', 'store' => 'salary.store', 'show' => 'salary.show'
+        Route::resource('expenses/salary', SalaryTransactionController::class)->names([
+            'index' => 'expenses.salary.index',
+            'create' => 'expenses.salary.create',
+            'store' => 'expenses.salary.store'
         ]);
-        Route::resource('expenses', ExpensesCategories::class);
+        Route::resource('expenses', OfficeTransactionController::class);
     });
-
 
 
 });
