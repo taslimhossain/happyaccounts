@@ -13,6 +13,7 @@ use App\Http\Controllers\ClientTransactionController;
 use App\Http\Controllers\VendorTransactionController;
 use App\Http\Controllers\SalaryTransactionController;
 use App\Http\Controllers\OfficeTransactionController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +86,9 @@ Route::middleware('auth')->group(function () {
             'store' => 'expenses.salary.store'
         ]);
         Route::resource('expenses', OfficeTransactionController::class);
+
+        Route::get('report/bank-transaction', [ReportController::class, 'bankTransaction'])->name('report.bank-transaction');
+        Route::get('report/office-transaction', [ReportController::class, 'officeTransaction'])->name('report.office-transaction');
     });
 
 

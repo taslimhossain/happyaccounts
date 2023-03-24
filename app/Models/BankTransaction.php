@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,6 +26,13 @@ class BankTransaction extends Model
         }
     }
     
+    public function scopeWithDebitAndCreditTotals($query)
+    {
+        return $query->select('*')
+        ->selectRaw('SUM(debit_amount) OVER (ORDER BY id) AS total_debit')
+        ->selectRaw('SUM(credit_amount) OVER (ORDER BY id) AS total_credit');
+    }
+
     public function scopeBank($query, $bank_id)
     {
         if($bank_id){

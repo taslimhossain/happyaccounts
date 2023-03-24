@@ -20,7 +20,6 @@ if(happyselect){
   });
 }
 
-
 function getThemeFromLocalStorage() {
     // if user already changed the theme, use it
     if (window.localStorage.getItem('dark')) {
@@ -97,3 +96,21 @@ Alpine.data('data', () => ({
 
 }))
 Alpine.start();
+
+// Get the "Print" button element
+const printButton = document.querySelector('#printButton');
+if(printButton){
+  printButton.addEventListener('click', () => {
+    const form = document.querySelector('#filterForm');
+
+    // Add a hidden input field for "is_print" to the form
+    const isPrintField = document.createElement('input');
+    isPrintField.setAttribute('type', 'hidden');
+    isPrintField.setAttribute('name', 'is_print');
+    isPrintField.setAttribute('value', 'yes');
+    form.appendChild(isPrintField);
+
+    form.target = '_blank';
+    form.submit();
+  });
+}

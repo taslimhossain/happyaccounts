@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -58,6 +59,22 @@ class OfficeTransaction extends Model
     public function getCategory()
     {
         return $this->belongsTo(Expenses_categories::class, 'expenses_id', 'id');
+    }
+
+    // public function scopeWithDebitAndCreditTotals($query)
+    // {
+    //     return $query->select(
+    //             'office_transactions.*',
+    //             DB::raw('(SELECT SUM(debit_amount) FROM office_transactions) AS total_debit'),
+    //             DB::raw('(SELECT SUM(credit_amount) FROM office_transactions) AS total_credit')
+    //         );
+    // }
+
+    public function scopeWithDebitAndCreditTotals($query)
+    {
+        return $query->select('*')
+        ->selectRaw('SUM(debit_amount) OVER (ORDER BY id) AS total_debit')
+        ->selectRaw('SUM(credit_amount) OVER (ORDER BY id) AS total_credit');
     }
 
 }

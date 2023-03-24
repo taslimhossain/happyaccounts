@@ -18,7 +18,7 @@ $toggle = ($id ?? true) ? $id : '';
 @else
 <button {{ $attributes->merge(['class' => $btn_classes]) }} class="" @click="toogleMenu('{{$toggle}}')" aria-haspopup="true" >
     <span class="inline-flex items-center">
-        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor" > <path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" ></path> </svg>
+        {{ $icon ?? '' }}
         <span class="ml-4">{{ $slot }}</span>
     </span>
     <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" >
