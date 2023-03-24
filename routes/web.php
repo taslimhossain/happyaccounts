@@ -89,6 +89,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('report/bank-transaction', [ReportController::class, 'bankTransaction'])->name('report.bank-transaction');
         Route::get('report/office-transaction', [ReportController::class, 'officeTransaction'])->name('report.office-transaction');
+        Route::get('report/project-transaction', [ReportController::class, 'projectTransaction'])->name('report.project-transaction');
+        Route::get('report/vendor-transaction', [ReportController::class, 'vendorTransaction'])->name('report.vendor-transaction');
     });
 
 

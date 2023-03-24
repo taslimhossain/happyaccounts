@@ -14,8 +14,8 @@
       'sub_mennu' => array(
           'bank_transaction' => array( 'name'   => 'Bank transaction', 'slug'   => 'report.bank-transaction', 'access' => 'admin'),
           'office_transaction' => array( 'name'   => 'Office transaction', 'slug'   => 'report.office-transaction', 'access' => 'admin'),
-          'project_transaction' => array( 'name'   => 'Project transaction', 'slug'   => 'report.office-transaction', 'access' => 'admin'),
-          'vendor_transaction' => array( 'name'   => 'Vendor transaction', 'slug'   => 'report.office-transaction', 'access' => 'admin'),
+          'project_transaction' => array( 'name'   => 'Project transaction', 'slug'   => 'report.project-transaction', 'access' => 'admin'),
+          'vendor_transaction' => array( 'name'   => 'Vendor transaction', 'slug'   => 'report.vendor-transaction', 'access' => 'admin'),
           'client_transaction' => array( 'name'   => 'Client transaction', 'slug'   => 'report.office-transaction', 'access' => 'admin'),
           'staff_transaction' => array( 'name'   => 'Staff transaction', 'slug'   => 'report.office-transaction', 'access' => 'admin'),
       )

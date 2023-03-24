@@ -61,14 +61,6 @@ class OfficeTransaction extends Model
         return $this->belongsTo(Expenses_categories::class, 'expenses_id', 'id');
     }
 
-    // public function scopeWithDebitAndCreditTotals($query)
-    // {
-    //     return $query->select(
-    //             'office_transactions.*',
-    //             DB::raw('(SELECT SUM(debit_amount) FROM office_transactions) AS total_debit'),
-    //             DB::raw('(SELECT SUM(credit_amount) FROM office_transactions) AS total_credit')
-    //         );
-    // }
 
     public function scopeWithDebitAndCreditTotals($query)
     {
