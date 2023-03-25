@@ -28,9 +28,6 @@ use App\Http\Controllers\ReportController;
 
 
 
-Route::get('/admin', function () {
-    return view('admin');
-})->name('admin');
 
 Route::get('/forms', function () {
     return view('admin');
@@ -45,6 +42,15 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+
+    Route::get('/', function () {
+        return view('admin');
+    })->name('admin');
+
+    Route::get('/admin', function () {
+        return view('admin');
+    })->name('admin');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -91,6 +97,8 @@ Route::middleware('auth')->group(function () {
         Route::get('report/office-transaction', [ReportController::class, 'officeTransaction'])->name('report.office-transaction');
         Route::get('report/project-transaction', [ReportController::class, 'projectTransaction'])->name('report.project-transaction');
         Route::get('report/vendor-transaction', [ReportController::class, 'vendorTransaction'])->name('report.vendor-transaction');
+        Route::get('report/client-transaction', [ReportController::class, 'clientTransaction'])->name('report.client-transaction');
+        Route::get('report/staff-transaction', [ReportController::class, 'staffTransaction'])->name('report.staff-transaction');
     });
 
 

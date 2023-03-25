@@ -11,7 +11,10 @@ use App\Models\Expenses_categories;
 use App\Models\ProjectTransaction;
 use App\Models\Project;
 use App\Models\Vendor;
+use App\Models\Client;
+use App\Models\Staff;
 use App\Models\VendorTransaction;
+use App\Models\ClientTransaction;
 
 
 
@@ -193,4 +196,85 @@ class ReportController extends Controller
         return view('report.vendor-transaction.transaction', compact('transactions', 'projects', 'vendors'));
 
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function clientTransaction(Request $request)
+    {   
+        //dd($request->all());
+        $client_id = $request->get('client_id');
+        $trans_type = $request->get('trans_type');
+        $projects_id = $request->get('projects_id');
+        $projects = Project::Active()->get();
+        $clients = Client::Active()->get();
+
+        if(request()->has('is_filter') && $request->get('is_filter') == 'yes'){
+            $transactions = ClientTransaction::when(request()->has('start_date') && request()->has('end_date') &&  request('start_date') !== null && request('end_date') !== null, function ($query) {
+                $startDate = $this->formatDate(request('start_date'));
+                $endDate = $this->formatDate(request('end_date'));
+                return $query->whereBetween('trans_date', [$startDate, $endDate]);
+            })
+            ->when(request()->has('projects_id')  && $projects_id !== 'all', function ($query) use ($projects_id) {
+                return $projects_id === 'all' ? $query : $query->where('project_id', $projects_id);
+            })
+            ->when(request()->has('client_id')  && $client_id !== 'all', function ($query) use ($client_id) {
+                return $client_id === 'all' ? $query : $query->where('client_id', $client_id);
+            })
+            ->with('globalTransaction:id,uuid')
+            ->withDebitAndCreditTotals()
+            ->latest()->get();
+
+            if(request('is_print') && request('is_print') === 'yes'){
+                return view('report.client-transaction.transaction-print', compact('transactions', 'projects', 'clients'));
+            }
+            return view('report.client-transaction.transaction-all', compact('transactions', 'projects', 'clients'));
+        } else {
+            $transactions = ClientTransaction::with('globalTransaction:id,uuid')->latest()->paginate();
+        }
+
+        return view('report.client-transaction.transaction', compact('transactions', 'projects', 'clients'));
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function staffTransaction(Request $request)
+    {   
+        //dd($request->all());
+        $staff_id = $request->get('staff_id');
+        $staffs = Staff::active()->get();
+
+        $expenses_categorie = $request->get('expenses_categorie');
+        $expenses_categories = Expenses_categories::OfficeActive()->get();
+
+        if(request()->has('is_filter') && $request->get('is_filter') == 'yes'){
+            $transactions = OfficeTransaction::where('is_salary', 'yes')
+            ->when(request()->has('start_date') && request()->has('end_date') &&  request('start_date') !== null && request('end_date') !== null, function ($query) {
+                $startDate = $this->formatDate(request('start_date'));
+                $endDate = $this->formatDate(request('end_date'));
+                return $query->whereBetween('trans_date', [$startDate, $endDate]);
+            })
+            ->when(request()->has('staff_id')  && $staff_id !== 'all', function ($query) use ($staff_id) {
+                return $staff_id === 'all' ? $query : $query->where('staff_id', $staff_id);
+            })
+            ->with('globalTransaction:id,uuid')
+            ->withDebitAndCreditTotals()
+            ->latest()->get();
+
+            if(request('is_print') && request('is_print') === 'yes'){
+                return view('report.staff-transaction.transaction-print', compact('transactions', 'staffs'));
+            }
+            return view('report.staff-transaction.transaction-all', compact('transactions', 'staffs'));
+        } else {
+            $transactions = OfficeTransaction::where('is_salary', 'yes')->with('globalTransaction:id,uuid')->latest()->paginate();
+        }
+
+        return view('report.staff-transaction.transaction', compact('transactions', 'staffs'));
+    }
+
 }
