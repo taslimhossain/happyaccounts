@@ -56,6 +56,14 @@ class BankTransaction extends Model
         return $this->belongsTo(GlobalTransaction::class, 'global_transaction_id', 'id');
     }
 
+    /**
+     * Get the Bank information .
+     */
+    public function bankName()
+    {
+        return $this->belongsTo(Banking::class, 'banking_id', 'id');
+    }
+
 
     public function getCreateDateAttribute()
     {

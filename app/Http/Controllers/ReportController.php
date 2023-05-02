@@ -57,6 +57,7 @@ class ReportController extends Controller
                 return $trans_type === 'all' ? $query : $query->where('trans_type', $trans_type);
             })
             ->with('globalTransaction:id,uuid')
+            ->with('bankName:id,account_name')
             ->withDebitAndCreditTotals()
             ->latest()->get();
 
@@ -65,7 +66,7 @@ class ReportController extends Controller
             }
             return view('report.bank-transaction.bank-transaction-all', compact('transactions', 'bankings'));
         } else {
-            $transactions = BankTransaction::with('globalTransaction:id,uuid')->WithBalance()->latest()->paginate();
+            $transactions = BankTransaction::with('globalTransaction:id,uuid')->with('bankName:id,account_name')->WithBalance()->latest()->paginate();
         }
 
         return view('report.bank-transaction.bank-transaction', compact('transactions', 'bankings'));
@@ -97,6 +98,9 @@ class ReportController extends Controller
                 return $expenses_categorie === 'all' ? $query : $query->where('expenses_id', $expenses_categorie);
             })
             ->with('globalTransaction:id,uuid')
+            ->with('bankName:id,account_name')
+            ->with('getCategory:id,name')
+            ->with('getStaff:id,name')
             ->withDebitAndCreditTotals()
             ->latest()->get();
 
@@ -105,7 +109,11 @@ class ReportController extends Controller
             }
             return view('report.office-transaction.transaction-all', compact('transactions', 'expenses_categories'));
         } else {
-            $transactions = OfficeTransaction::with('globalTransaction:id,uuid')->latest()->paginate();
+            $transactions = OfficeTransaction::with('globalTransaction:id,uuid')
+            ->with('bankName:id,account_name')
+            ->with('getCategory:id,name')
+            ->with('getStaff:id,name')
+            ->latest()->paginate();
         }
 
         return view('report.office-transaction.transaction', compact('transactions', 'expenses_categories'));
@@ -138,6 +146,14 @@ class ReportController extends Controller
                 return $trans_type === 'all' ? $query : $query->where('trans_type', $trans_type);
             })
             ->with('globalTransaction:id,uuid')
+            ->with('bankName:id,account_name')
+            ->with('projectName:id,project_title')
+            ->with('vendorName:id,name')
+            ->with('clientName:id,client_name')
+            ->with(['projectTransaction' => function ($query) {
+                $query->select('id', 'global_transaction_id', 'expenses_id');
+                $query->with('expensesName:id,name');
+            }])
             ->withDebitAndCreditTotals()
             ->latest()->get();
 
@@ -146,7 +162,17 @@ class ReportController extends Controller
             }
             return view('report.project-transaction.transaction-all', compact('transactions', 'projects'));
         } else {
-            $transactions = ProjectTransaction::with('globalTransaction:id,uuid')->latest()->paginate();
+             $transactions = ProjectTransaction::with('globalTransaction:id,uuid')
+            ->with('bankName:id,account_name')
+            ->with('projectName:id,project_title')
+            ->with('vendorName:id,name')
+            ->with('clientName:id,client_name')
+            ->with(['projectTransaction' => function ($query) {
+                $query->select('id', 'global_transaction_id', 'expenses_id');
+                $query->with('expensesName:id,name');
+            }])
+            ->latest()
+            ->paginate();
         }
 
         return view('report.project-transaction.transaction', compact('transactions', 'projects'));
@@ -182,6 +208,13 @@ class ReportController extends Controller
                 return $trans_type === 'all' ? $query : $query->where('trans_type', $trans_type);
             })
             ->with('globalTransaction:id,uuid')
+            ->with('bankName:id,account_name')
+            ->with('projectName:id,project_title')
+            ->with('vendorName:id,name')
+            ->with(['projectTransaction' => function ($query) {
+                $query->select('id', 'global_transaction_id', 'expenses_id');
+                $query->with('expensesName:id,name');
+            }])
             ->withDebitAndCreditTotals()
             ->latest()->get();
 
@@ -190,7 +223,17 @@ class ReportController extends Controller
             }
             return view('report.vendor-transaction.transaction-all', compact('transactions', 'projects', 'vendors'));
         } else {
-            $transactions = VendorTransaction::with('globalTransaction:id,uuid')->latest()->paginate();
+
+            $transactions = VendorTransaction::with('globalTransaction:id,uuid')
+            ->with('bankName:id,account_name')
+            ->with('projectName:id,project_title')
+            ->with('vendorName:id,name')
+            ->with(['projectTransaction' => function ($query) {
+                $query->select('id', 'global_transaction_id', 'expenses_id');
+                $query->with('expensesName:id,name');
+            }])
+            ->latest()
+            ->paginate();
         }
 
         return view('report.vendor-transaction.transaction', compact('transactions', 'projects', 'vendors'));
@@ -223,6 +266,9 @@ class ReportController extends Controller
                 return $client_id === 'all' ? $query : $query->where('client_id', $client_id);
             })
             ->with('globalTransaction:id,uuid')
+            ->with('bankName:id,account_name')
+            ->with('projectName:id,project_title')
+            ->with('clientName:id,client_name')
             ->withDebitAndCreditTotals()
             ->latest()->get();
 
@@ -231,7 +277,7 @@ class ReportController extends Controller
             }
             return view('report.client-transaction.transaction-all', compact('transactions', 'projects', 'clients'));
         } else {
-            $transactions = ClientTransaction::with('globalTransaction:id,uuid')->latest()->paginate();
+             $transactions = ClientTransaction::with('globalTransaction:id,uuid')->with('bankName:id,account_name')->with('projectName:id,project_title')->with('clientName:id,client_name')->latest()->paginate();
         }
 
         return view('report.client-transaction.transaction', compact('transactions', 'projects', 'clients'));
@@ -263,6 +309,8 @@ class ReportController extends Controller
                 return $staff_id === 'all' ? $query : $query->where('staff_id', $staff_id);
             })
             ->with('globalTransaction:id,uuid')
+            ->with('getStaff:id,name')
+            ->with('bankName:id,account_name')
             ->withDebitAndCreditTotals()
             ->latest()->get();
 
@@ -271,7 +319,7 @@ class ReportController extends Controller
             }
             return view('report.staff-transaction.transaction-all', compact('transactions', 'staffs'));
         } else {
-            $transactions = OfficeTransaction::where('is_salary', 'yes')->with('globalTransaction:id,uuid')->latest()->paginate();
+            $transactions = OfficeTransaction::where('is_salary', 'yes')->with('globalTransaction:id,uuid')->with('getStaff:id,name')->with('bankName:id,account_name')->latest()->paginate();
         }
 
         return view('report.staff-transaction.transaction', compact('transactions', 'staffs'));

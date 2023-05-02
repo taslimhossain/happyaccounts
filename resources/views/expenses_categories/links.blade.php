@@ -21,6 +21,4 @@
   </x-happy-button>
   @endif
 
-
-  {{ Route::currentRouteName() }}
   </div>

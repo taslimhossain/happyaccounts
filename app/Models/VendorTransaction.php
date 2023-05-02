@@ -33,6 +33,48 @@ class VendorTransaction extends Model
         return $this->belongsTo(GlobalTransaction::class, 'global_transaction_id', 'id');
     }
 
+    /**
+     * Get the Bank information .
+     */
+    public function bankName()
+    {
+        return $this->belongsTo(Banking::class, 'banking_id', 'id');
+    }
+
+    /**
+     * Get the project information .
+     */
+    public function projectName()
+    {
+        return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+
+    /**
+     * Get the project information .
+     */
+    public function vendorName()
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id', 'id');
+    }
+
+    /**
+     * Get the project information .
+     */
+    public function projectTransaction()
+    {
+        return $this->belongsTo(ProjectTransaction::class, 'global_transaction_id', 'global_transaction_id');
+    }
+
+
+    // /**
+    //  * Get the project information .
+    //  */
+    // public function getCat()
+    // {
+    //     return $this->belongsTo(ProjectTransaction::class, 'global_transaction_id', 'global_transaction_id');
+    // }
+
+
     public function scopeWithDebitAndCreditTotals($query)
     {
         return $query->select('*')

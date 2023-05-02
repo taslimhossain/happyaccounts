@@ -42,5 +42,53 @@ class ProjectTransaction extends Model
         ->selectRaw('SUM(credit_amount) OVER (ORDER BY id) AS total_credit');
     }
 
+    /**
+     * Get the expenses name .
+     */
+    public function expensesName()
+    {
+        return $this->belongsTo(Expenses_categories::class, 'expenses_id', 'id');
+    }
+
+    /**
+     * Get the Bank information .
+     */
+    public function bankName()
+    {
+        return $this->belongsTo(Banking::class, 'banking_id', 'id');
+    }
+
+    /**
+     * Get the project information .
+     */
+    public function projectName()
+    {
+        return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+
+    /**
+     * Get the project information .
+     */
+    public function vendorName()
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id', 'id');
+    }
+
+    /**
+     * Get the client information .
+     */
+    public function clientName()
+    {
+        return $this->belongsTo(Client::class, 'client_id', 'id');
+    }
+
+    /**
+     * Get the project information .
+     */
+    public function projectTransaction()
+    {
+        return $this->belongsTo(ProjectTransaction::class, 'global_transaction_id', 'global_transaction_id');
+    }
+
 
 }

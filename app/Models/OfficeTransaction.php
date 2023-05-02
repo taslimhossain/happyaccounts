@@ -54,7 +54,16 @@ class OfficeTransaction extends Model
     }
 
     /**
-     * Get the Staff .
+     * Get the Bank information .
+     */
+    public function bankName()
+    {
+        return $this->belongsTo(Banking::class, 'banking_id', 'id');
+    }
+
+
+    /**
+     * Get the Category .
     */
     public function getCategory()
     {

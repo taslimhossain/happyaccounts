@@ -1,4 +1,4 @@
-<form method="GET" action="{{ route('report.vendor-transaction') }}" class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" id="filterForm">
+<form method="GET" action="{{ route('report.project-transaction') }}" class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" id="filterForm">
       <div class="grid grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
         <div class="col-span-12 sm:col-span-3">
           <x-input-label for="projects_id" :value="__('Project')" />

@@ -14,7 +14,7 @@
       </button>
       <!-- Search input -->
       <div class="flex justify-center flex-1 lg:mr-32">
-        <div class="relative w-full max-w-xl mr-6 focus-within:text-indigo-500">
+        {{-- <div class="relative w-full max-w-xl mr-6 focus-within:text-indigo-500">
           <div class="absolute inset-y-0 flex items-center pl-2">
             <svg
               class="w-4 h-4"
@@ -35,7 +35,7 @@
             placeholder="Search for projects"
             aria-label="Search"
           />
-        </div>
+        </div> --}}
       </div>
       <ul class="flex items-center flex-shrink-0 space-x-6">
         <!-- Theme toggler -->

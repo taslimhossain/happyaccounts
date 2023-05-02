@@ -19,6 +19,7 @@
                       <th class="px-4 py-3">Post Date</th>
                       <th class="px-4 py-3">Particulars</th>
                       <th class="px-4 py-3">Trans ID</th>
+                      <th class="px-4 py-3 w-36">Account</th>
                       <th class="px-4 py-3">Debit Amount</th>
                     </tr>
                   </thead>
@@ -27,13 +28,15 @@
                       <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-2 text-sm"><p class="font-bold">{{ $transaction->trans_date }}</p> </td>
                         <td class="px-4 py-2 text-sm"> {{ $transaction->create_date }} </td>
-                        <td class="px-4 py-2 text-sm"> <span class="font-semibold uppercase">{{ $transaction->particulars }}</span> {{ $transaction->reference ? 'Reference: '.$transaction->reference : null  }} Trace ID: {{ $transaction->globalTransaction->uuid }} </td>
+                        <td class="px-4 py-2 text-sm"> <span class="font-semibold uppercase">{{ $transaction->particulars }}</span> {{ $transaction->reference ? 'Reference: '.$transaction->reference : null  }}, Trace ID: {{ $transaction->globalTransaction->uuid }}, Staff name: {{ $transaction->getStaff->name }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $transaction->uuid }} </td>
+                        <td class="px-3 py-2 text-sm"> {{ $transaction->bankName->account_name }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $transaction->debit_amount }} </td>
                       </tr>
                       @if ($loop->last)
                         <tr>
                           <td class="px-4 py-2 text-sm"><p class="font-bold">Total:</p></td>
+                          <td class="px-4 py-2 text-sm"></td>
                           <td class="px-4 py-2 text-sm"></td>
                           <td class="px-4 py-2 text-sm"></td>
                           <td class="px-4 py-2 text-sm"></td>

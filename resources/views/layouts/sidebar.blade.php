@@ -42,7 +42,7 @@
       'sub_mennu' => array(
           'index'              => array( 'name'   => 'Project list', 'slug'   => 'project.index', 'access' => 'admin'),
           'create'             => array( 'name'   => 'Add new project', 'slug'   => 'project.create', 'access' => 'admin'),
-          'transaction'        => array( 'name'   => 'Transaction', 'slug'   => 'project.transaction', 'access' => 'admin'),
+         // 'transaction'        => array( 'name'   => 'Transaction', 'slug'   => 'project.transaction', 'access' => 'admin'),
           'expenses_categorie' => array( 'name'   => 'Expenses Categories', 'slug'   => 'project.expenses_categorie', 'access' => 'admin'),
       )
     ),

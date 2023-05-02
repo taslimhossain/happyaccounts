@@ -24,6 +24,7 @@
                       <th class="px-4 py-3">Post Date</th>
                       <th class="px-4 py-3">Particulars</th>
                       <th class="px-4 py-3">Trans ID</th>
+                      <th class="px-4 py-3 w-36">Account</th>
                       <th class="px-4 py-3">Debit Amount</th>
                       <th class="px-4 py-3">Credit Amount</th>
                       <th class="px-4 py-3">Actions</th>
@@ -34,8 +35,9 @@
                       <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-2 text-sm"><p class="font-bold">{{ $banking->trans_date }}</p> </td>
                         <td class="px-4 py-2 text-sm"> {{ $banking->create_date }} </td>
-                        <td class="px-4 py-2 text-sm"> <span class="font-semibold uppercase">{{ $banking->particulars }}</span> {{ $banking->reference ? 'Reference: '.$banking->reference : null  }} Trace ID: {{ $banking->globalTransaction->uuid }} </td>
+                        <td class="px-4 py-2 text-sm"> <span class="font-semibold uppercase">{{ $banking->particulars }}</span> {{ $banking->getStaff ? 'to '.$banking->getStaff->name : '' }} {{ $banking->getCategory ? $banking->getCategory->name : '' }} {{ $banking->reference ? 'Reference: '.$banking->reference : null  }}, Trace ID: {{ $banking->globalTransaction->uuid }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $banking->uuid }} </td>
+                        <td class="px-3 py-2 text-sm"> {{ $banking->bankName->account_name }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $banking->debit_amount }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $banking->credit_amount }} </td>
                         <td class="px-4 py-2">

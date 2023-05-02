@@ -32,6 +32,30 @@ class ClientTransaction extends Model
         return $this->belongsTo(GlobalTransaction::class, 'global_transaction_id', 'id');
     }
 
+    /**
+     * Get the Bank information .
+     */
+    public function bankName()
+    {
+        return $this->belongsTo(Banking::class, 'banking_id', 'id');
+    }
+
+    /**
+     * Get the project information .
+     */
+    public function projectName()
+    {
+        return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+
+    /**
+     * Get the client information .
+     */
+    public function clientName()
+    {
+        return $this->belongsTo(Client::class, 'client_id', 'id');
+    }
+
     public function scopeWithDebitAndCreditTotals($query)
     {
         return $query->select('*')
