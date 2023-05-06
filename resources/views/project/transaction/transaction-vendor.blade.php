@@ -22,7 +22,7 @@
                   <x-input-error :messages="$errors->get('account')" class="mt-2" />
                 </div>
                 <div class="col-span-12 sm:col-span-4">
-                  <x-input-label for="vendor_id" :value="__('vendor_id')" />
+                  <x-input-label for="vendor_id" :value="__('Vendor')" />
                   <x-select-input name="vendor_id" class="happyselect" required>
                     <option>Select vendor</option>
                     @foreach($vendors as $vendor)

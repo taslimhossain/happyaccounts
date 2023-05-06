@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Str;
 use App\Models\Project;
+use App\Models\ProjectTransaction;
 use App\Models\Client;
 use App\Models\Expenses_categories;
 use App\Models\Vendor;
@@ -95,8 +96,9 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        $project_expense = ProjectTransaction::where('project_id', $project->id)->sum('debit_amount');
         $project = Project::with('client_details')->findOrFail($project->id);
-        return view('project.show', compact('project'));
+        return view('project.show', compact('project', 'project_expense'));
     }
 
     /**
@@ -179,6 +181,20 @@ class ProjectController extends Controller
         $clients           = Client::active()->get();
         $bankings          = Banking::active()->get();
         return view('project.transaction.transaction-client', compact('project','clients', 'bankings'));
+    }
+
+    /**
+     * Display client transaction form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function transactionWithOther()
+    {
+        $project           = $this->getProject();
+        $clients           = Client::active()->get();
+        $expenses_cateogrys = Expenses_categories::projectActive()->get();
+        $bankings          = Banking::active()->get();
+        return view('project.transaction.transaction-other', compact('project','clients','expenses_cateogrys', 'bankings'));
     }
 
     /**

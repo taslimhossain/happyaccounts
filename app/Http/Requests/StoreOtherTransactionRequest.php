@@ -8,7 +8,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreVendorTransactionRequest extends FormRequest
+class StoreOtherTransactionRequest extends FormRequest
 {
 
     /**
@@ -37,7 +37,6 @@ class StoreVendorTransactionRequest extends FormRequest
     {
         return [
             'project_id'        => ['required','numeric','exists:projects,id'],
-            'vendor_id'         => ['required','numeric','exists:vendors,id'],
             'account'           => ['required','numeric','exists:bankings,id'],
             'expenses_cateogry' => ['required','numeric','exists:expenses_categories,id'],
             'transaction_type'  => ['required', 'numeric','min:1','max:1'],
@@ -56,10 +55,6 @@ class StoreVendorTransactionRequest extends FormRequest
             'project_id.required' => __('The :attribute field is required', ['attribute' => __('Project')]),
             'project_id.numeric'  => __(':attribute id must be a number', ['attribute' => __('Project')]),
             'project_id.exists'   => __('The selected :attribute id is invalid.', ['attribute' => __('Project')]),
-
-            'vendor_id.required' => __('The :attribute field is required', ['attribute' => __('Vendor')]),
-            'vendor_id.numeric'  => __(':attribute id must be a number', ['attribute' => __('Vendor')]),
-            'vendor_id.exists'   => __('The selected :attribute id is invalid.', ['attribute' => __('Vendor')]),
 
             'transaction_type.required' => __('The :attribute have to select', ['attribute' => __('Transaction type')]),
             'transaction_type.numeric'  => __(':attribute field must be a number', ['attribute' => __('Transaction type')]),

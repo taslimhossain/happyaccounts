@@ -71,9 +71,11 @@ Route::middleware('auth')->group(function () {
         Route::get('project/expenses_categorie', [ProjectController::class, 'expensesCategories'])->name('project.expenses_categorie');
         Route::get('project/transaction', [ProjectController::class, 'expensesCategories'])->name('project.transaction');
         Route::get('project/{uuid}/client-transaction', [ProjectController::class, 'transactionWithClient'])->name('project.uuid.client-transaction');
+        Route::get('project/{uuid}/other-transaction', [ProjectController::class, 'transactionWithOther'])->name('project.uuid.other-transaction');
         Route::get('project/{uuid}/vendor-transaction', [ProjectController::class, 'transactionWithVendor'])->name('project.uuid.vendor-transaction');
         Route::post('project/client-transaction/store', [ClientTransactionController::class, 'store'])->name('project.client-transaction.store');
         Route::post('project/vendor-transaction/store', [VendorTransactionController::class, 'store'])->name('project.vendor-transaction.store');
+        Route::post('project/other-transaction/store', [VendorTransactionController::class, 'otherstore'])->name('project.other-transaction.store');
 
         Route::resource('project', ProjectController::class);
         Route::resource('project.transaction', ProjectTransactionController::class);
