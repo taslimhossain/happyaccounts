@@ -35,8 +35,8 @@
                       <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-2 text-sm"><p class="font-bold">{{ $banking->trans_date }}</p> </td>
                         <td class="px-4 py-2 text-sm"> {{ $banking->create_date }} </td>
-                        <td class="px-4 py-2 text-sm"> <span class="font-semibold uppercase">{{ $banking->particulars }}</span> {{ $banking->reference ? 'Reference: '.$banking->reference : null  }}, Trace ID: {{ $banking->globalTransaction->uuid }}, Project: {{ $banking->projectName->project_title }}, Client: {{ $banking->clientName->client_name }}</td>
-                        <td class="px-4 py-2 text-sm"> {{ $banking->uuid }} </td>
+                        <td class="px-4 py-2 text-sm"> <span class="font-semibold uppercase">{{ $banking->particulars }}</span> {{ $banking->reference ? 'Reference: '.$banking->reference : null  }},  Client: {{ $banking->clientName->client_name }}</td>
+                        <td class="px-4 py-2 text-sm"> {{  $banking->globalTransaction->uuid }} </td>
                         <td class="px-3 py-2 text-sm"> {{ $banking->bankName->account_name }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $banking->debit_amount }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $banking->credit_amount }} </td>
