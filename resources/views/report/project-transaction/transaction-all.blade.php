@@ -29,8 +29,8 @@
                       <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-2 text-sm"><p class="font-bold">{{ $transaction->trans_date }}</p> </td>
                         <td class="px-4 py-2 text-sm"> {{ $transaction->create_date }} </td>
-                        <td class="px-4 py-2 text-sm"> <span class="font-semibold uppercase">{{ $transaction->particulars }}</span> {{ $transaction->reference ? 'Reference: '.$transaction->reference : null  }} Trace ID: {{ $transaction->globalTransaction->uuid }}, Project: {{ $transaction->projectName->project_title }}, {{ $transaction->clientName ? 'Client: '.$transaction->clientName->client_name : '' }} {{ $transaction->vendorName ? 'Vendor: '.$transaction->vendorName->name : '' }} {{ $transaction->projectTransaction->expensesName ? ', '. $transaction->projectTransaction->expensesName->name : '' }}  </td>
-                        <td class="px-4 py-2 text-sm"> {{ $transaction->uuid }} </td>
+                        <td class="px-4 py-2 text-sm"> <span class="font-semibold uppercase">{{ $transaction->particulars }}</span> {{ $transaction->reference ? 'Reference: '.$transaction->reference : null  }} , Project: {{ $transaction->projectName->project_title }}, {{ $transaction->clientName ? 'Client: '.$transaction->clientName->client_name : '' }} {{ $transaction->vendorName ? 'Vendor: '.$transaction->vendorName->name : '' }} {{ $transaction->projectTransaction->expensesName ? ', '. $transaction->projectTransaction->expensesName->name : '' }}  </td>
+                        <td class="px-4 py-2 text-sm"> {{ $transaction->globalTransaction->uuid }} </td>
                         <td class="px-3 py-2 text-sm"> {{ $transaction->bankName->account_name }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $transaction->debit_amount }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $transaction->credit_amount }} </td>

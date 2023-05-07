@@ -20,12 +20,12 @@
               </div>
               <div class="col-span-12 sm:col-span-4">
                   <x-input-label for="phone" :value="__('Phone')" />
-                  <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" placeholder="01670504029" :value="old('phone', $vendor->phone)" required autofocus />
+                  <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" placeholder="01600000000" :value="old('phone', $vendor->phone)" required autofocus />
                   <x-input-error :messages="$errors->get('phone')" class="mt-2" />
               </div>
               <div class="col-span-12 sm:col-span-4">
                 <x-input-label for="phone_2" :value="__('Phone 2')" />
-                <x-text-input id="phone_2" class="block mt-1 w-full" type="text" name="phone_2" placeholder="01676966260" :value="old('phone_2', $vendor->phone_2)" autofocus />
+                <x-text-input id="phone_2" class="block mt-1 w-full" type="text" name="phone_2" placeholder="01700000000" :value="old('phone_2', $vendor->phone_2)" autofocus />
                 <x-input-error :messages="$errors->get('phone_2')" class="mt-2" />
             </div>
               <div class="col-span-12 sm:col-span-4">
@@ -51,7 +51,7 @@
               </div>
               <div class="col-span-12 sm:col-span-4">
                   <x-input-label for="billing_phone" :value="__('Billing phone')" />
-                  <x-text-input id="billing_phone" class="block mt-1 w-full" type="text" name="billing_phone" placeholder="01676966260" :value="old('billing_phone', $vendor->billing_phone)" required autofocus />
+                  <x-text-input id="billing_phone" class="block mt-1 w-full" type="text" name="billing_phone" placeholder="01700000000" :value="old('billing_phone', $vendor->billing_phone)" required autofocus />
                   <x-input-error :messages="$errors->get('billing_phone')" class="mt-2" />
               </div>
               <div class="col-span-12 sm:col-span-4">
