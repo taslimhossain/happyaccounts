@@ -29,7 +29,7 @@
                         <td class="px-4 py-2 text-sm"><p class="font-bold">{{ $transaction->trans_date }}</p> </td>
                         <td class="px-4 py-2 text-sm"> {{ $transaction->create_date }} </td>
                         <td class="px-4 py-2 text-sm"> <span class="font-semibold uppercase">{{ $transaction->particulars }}</span> {{ $transaction->reference ? 'Reference: '.$transaction->reference : null  }}  </td>
-                        <td class="px-4 py-2 text-sm"> {{ $transaction->globalTransaction->uuid }} </td>
+                       
                         <td class="px-4 py-2 text-sm"> {{ $transaction->debit_amount }} </td>
                         <td class="px-4 py-2 text-sm"> {{ $transaction->credit_amount }} </td>
                       </tr>
