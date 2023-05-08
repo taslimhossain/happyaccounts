@@ -1,11 +1,8 @@
 <x-admin-layout>
     <x-slot:page_title>
-            {{ __('Power Qoeng Ltd.') }}
+            {{ __('Dashboard') }}
     </x-slot>
 
-    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-        Dashboard
-   </h4>
       
     <div class="grid  mb-8">
 
