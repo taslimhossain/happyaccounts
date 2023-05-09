@@ -36,7 +36,7 @@
               <p>{{ $transaction->create_date }}</p>
               @endif
           </td>
-          <td class="px-2 py-1 text-xs"> <span class="font-semibold uppercase">{{ $transaction->particulars }}</span> {{ $transaction->getStaff ? 'to '.$transaction->getStaff->name : '' }} {{ $transaction->getCategory ? $transaction->getCategory->name : '' }} {{ $transaction->reference ? 'Reference: '.$transaction->reference : null  }}, Trace ID: {{ $transaction->globalTransaction->uuid }} </td>
+          <td class="px-2 py-1 text-xs"> <span class="font-semibold uppercase">{{ $transaction->particulars }}</span> {{ $transaction->getStaff ? 'to '.$transaction->getStaff->name : '' }} {{ $transaction->getCategory ? $transaction->getCategory->name : '' }} {{ $transaction->reference ? 'Reference: '.$transaction->reference : null  }}, Trans ID: {{ $transaction->globalTransaction->uuid }} </td>
           <td class="px-3 py-2 text-sm"> {{ $transaction->bankName->account_name }} </td>
           <td class="px-2 py-1 text-xs"> {{ $transaction->debit_amount }} </td>
           <td class="px-2 py-1 text-xs"> {{ $transaction->credit_amount }} </td>

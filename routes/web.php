@@ -45,11 +45,11 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/', function () {
-        return view('admin');
+        return view('dashboard');
     })->name('admin');
 
     Route::get('/admin', function () {
-        return view('admin');
+        return view('dashboard');
     })->name('admin');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
