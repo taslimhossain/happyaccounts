@@ -127,7 +127,7 @@ class ReportController extends Controller
      */
     public function projectTransaction(Request $request)
     {   
-        //dd($request->all());
+
         $banking_id = $request->get('banking_id');
         $trans_type = $request->get('trans_type');
         $projects_id = $request->get('projects_id');

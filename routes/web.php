@@ -13,6 +13,7 @@ use App\Http\Controllers\ClientTransactionController;
 use App\Http\Controllers\VendorTransactionController;
 use App\Http\Controllers\SalaryTransactionController;
 use App\Http\Controllers\OfficeTransactionController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportController;
 
 /*
@@ -37,21 +38,17 @@ Route::get(md5('abcdef'), function () {
     return view('admin');
 })->name('mradmin.abc');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
 
 
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('admin');
+    Route::get('/', [DashboardController::class, 'index'])->name('admin');
+    Route::get('/admin', [DashboardController::class, 'index'])->name('admin');
 
-    Route::get('/admin', function () {
-        return view('dashboard');
-    })->name('admin');
-
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

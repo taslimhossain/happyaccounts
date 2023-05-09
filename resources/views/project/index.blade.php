@@ -1,5 +1,5 @@
 @php
-   use App\Helpers\Constant; 
+   use App\Helpers\Constant;
 @endphp
 <x-admin-layout>
     <x-slot:page_title>
@@ -11,7 +11,6 @@
 
     <div class="py-6 animate-bottom">
         <div class="mx-auto">
-
             <div class="w-full bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
               <div class="w-full overflow-x-auto">
                 <table class="w-full whitespace-no-wrap">

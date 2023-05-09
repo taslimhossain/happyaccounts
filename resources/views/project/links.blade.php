@@ -21,8 +21,7 @@
   @endif
 
 
-  @if( request()->routeIs('project.show') )
-
+@if( request()->routeIs('project.show') )
   <x-happy-button href="{{ route('project.transaction.index', $project) }}"  class="mr-5 bg-teal-600" bgColor="teal" iconPosition="right" >
     {{ __('Transaction List') }}
     <x-slot name="icon">

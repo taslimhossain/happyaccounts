@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\ProjectTransaction;
 use App\Models\Client;
 use App\Models\Project;
@@ -30,9 +31,24 @@ class ProjectTransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        echo 'index';
+        $project = $this->project();
+        $project_title = $project->project_title ? $project->project_title : '';
+        $transactions = ProjectTransaction::with('globalTransaction:id,uuid')
+        ->where('project_id', $project->id)
+        ->with('bankName:id,account_name')
+        ->with('projectName:id,project_title')
+        ->with('vendorName:id,name')
+        ->with('clientName:id,client_name')
+        ->with(['projectTransaction' => function ($query) {
+            $query->select('id', 'global_transaction_id', 'expenses_id');
+            $query->with('expensesName:id,name');
+        }])
+        ->latest()
+        ->paginate();
+
+        return view('project.transaction.transaction', compact('transactions', 'project_title'));
     }
 
     /**
