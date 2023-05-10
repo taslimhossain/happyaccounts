@@ -34,6 +34,7 @@ return new class extends Migration
             $table->enum('trans_type', array('debit','credit'))->nullable(false);
             $table->dateTime('trans_time')->default(now());
             $table->date('trans_date')->default(now());
+            $table->enum('expenses_for', array('other','vendor'))->default('vendor');
             $table->timestamps();
         });
     }

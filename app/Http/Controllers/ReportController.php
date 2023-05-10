@@ -131,7 +131,11 @@ class ReportController extends Controller
         $banking_id = $request->get('banking_id');
         $trans_type = $request->get('trans_type');
         $projects_id = $request->get('projects_id');
+        $pay_to = $request->get('pay_to');
         $projects = Project::Active()->get();
+
+        $expenses_categorie = $request->get('expenses_categorie');
+        $expenses_categories = Expenses_categories::ProjectActive()->get();
 
         if(request()->has('is_filter') && $request->get('is_filter') == 'yes'){
             $transactions = ProjectTransaction::when(request()->has('start_date') && request()->has('end_date') &&  request('start_date') !== null && request('end_date') !== null, function ($query) {
@@ -144,6 +148,12 @@ class ReportController extends Controller
             })
             ->when(request()->has('trans_type')  && $trans_type !== 'all', function ($query) use ($trans_type) {
                 return $trans_type === 'all' ? $query : $query->where('trans_type', $trans_type);
+            })
+            ->when(request()->has('pay_to')  && $pay_to !== 'all', function ($query) use ($pay_to) {
+                return $pay_to === 'all' ? $query : $query->where('expenses_for', $pay_to);
+            })
+            ->when(request()->has('expenses_categorie')  && $expenses_categorie !== 'all', function ($query) use ($expenses_categorie) {
+                return $expenses_categorie === 'all' ? $query : $query->where('expenses_id', $expenses_categorie);
             })
             ->with('globalTransaction:id,uuid')
             ->with('bankName:id,account_name')
@@ -158,9 +168,9 @@ class ReportController extends Controller
             ->latest()->get();
 
             if(request('is_print') && request('is_print') === 'yes'){
-                return view('report.project-transaction.transaction-print', compact('transactions', 'projects'));
+                return view('report.project-transaction.transaction-print', compact('transactions', 'projects', 'expenses_categories'));
             }
-            return view('report.project-transaction.transaction-all', compact('transactions', 'projects'));
+            return view('report.project-transaction.transaction-all', compact('transactions', 'projects', 'expenses_categories'));
         } else {
              $transactions = ProjectTransaction::with('globalTransaction:id,uuid')
             ->with('bankName:id,account_name')
@@ -175,7 +185,7 @@ class ReportController extends Controller
             ->paginate();
         }
 
-        return view('report.project-transaction.transaction', compact('transactions', 'projects'));
+        return view('report.project-transaction.transaction', compact('transactions', 'projects', 'expenses_categories'));
 
     }
     /**

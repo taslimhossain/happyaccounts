@@ -18,13 +18,13 @@ return new class extends Migration
             $table->uuid('uuid')->nullable()->unique();
             $table->string('client_name')->nullable(false);
             $table->string('phone');
-            $table->string('phone_2');
+            $table->string('phone_2')->nullable(true);;
             $table->string('email');
             $table->text('address');
             $table->string('billing_name');
             $table->string('billing_phone');
             $table->text('billing_address');
-            $table->text('description');
+            $table->text('description')->nullable(true);;
             $table->integer('status')->default(\App\Helpers\Constant::ROW_STATUS['active']);
             $table->timestamps();
         });

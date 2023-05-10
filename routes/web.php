@@ -15,6 +15,7 @@ use App\Http\Controllers\SalaryTransactionController;
 use App\Http\Controllers\OfficeTransactionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\DetailsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,7 +100,8 @@ Route::middleware('auth')->group(function () {
         Route::get('report/client-transaction', [ReportController::class, 'clientTransaction'])->name('report.client-transaction');
         Route::get('report/staff-transaction', [ReportController::class, 'staffTransaction'])->name('report.staff-transaction');
 
-        Route::get('transaction/{uuid}', [ProjectController::class, 'transactionWithVendor'])->name('project.global_transaction');
+        Route::get('transaction/{uuid}', [DetailsController::class, 'details_transaction'])->name('transaction-details');
+        Route::get('search-transaction', [DetailsController::class, 'details_transaction'])->name('transaction-search');
     });
 
 

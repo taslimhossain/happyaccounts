@@ -65,6 +65,19 @@
 
     </div>
 
+    <form method="GET" action="{{ route('transaction-search') }}" class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" id="filterForm">
+      <div class="grid grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+        <div class="col-span-12 sm:col-span-4">
+          <x-input-label for="transaction_id" :value="__('Search by transaction number')" />
+          <x-text-input id="transaction_id" class="block mt-1 w-full" type="text" name="transaction_id" placeholder="Search by transaction number" :value="request('transaction_id')" required autofocus />
+        </div>
+        
+        <div class="col-span-12 sm:col-span-4">
+          <x-happy-button class="mt-6" type="submit" > {{ __('Submit') }} </x-happy-button>   
+        </div>
+      </div>
+    </form>
+
     <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"> Project List </h4>
 
     <div class="py-6 animate-bottom">

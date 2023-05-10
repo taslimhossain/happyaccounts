@@ -1,11 +1,22 @@
 <form method="GET" action="{{ route('report.project-transaction') }}" class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" id="filterForm">
       <div class="grid grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+        
         <div class="col-span-12 sm:col-span-3">
           <x-input-label for="projects_id" :value="__('Project')" />
-          <x-select-input name="projects_id" required class="happyselect">
+          <x-select-input name="projects_id" class="happyselect">
             <option value="all">All project</option>
             @foreach($projects as $project)
             <option value="{{ $project->id }}" {{ request('projects_id') != $project->id ?: 'selected' }}>{{ $project->project_title }}</option>
+            @endforeach
+          </x-select-input>
+        </div>
+
+        <div class="col-span-12 sm:col-span-3">
+          <x-input-label for="expenses_categorie" :value="__('Expenses categorie')" />
+          <x-select-input name="expenses_categorie" class="happyselect">
+            <option value="all">All expenses categorie</option>
+            @foreach($expenses_categories as $expenses_categorie)
+            <option value="{{ $expenses_categorie->id }}" {{ request('expenses_categorie') != $expenses_categorie->id ?: 'selected' }}>{{ $expenses_categorie->name }}</option>
             @endforeach
           </x-select-input>
         </div>
@@ -21,11 +32,20 @@
         </div>
 
         <div class="col-span-12 sm:col-span-3">
-          <x-input-label for="trans_type" :value="__('Transaction type')" />
+          <x-input-label for="trans_type" :value="__('Transaction Type')" />
           <x-select-input name="trans_type">
             <option value="all">All</option>
             <option value="debit" {{ request('trans_type') === 'debit' ? 'selected' : '' }}>Debit</option>
             <option value="credit" {{ request('trans_type') === 'credit' ? 'selected' : '' }}>Credit</option>
+          </x-select-input>
+        </div>
+
+        <div class="col-span-12 sm:col-span-3">
+          <x-input-label for="pay_to" :value="__('Pay to')" />
+          <x-select-input name="pay_to">
+            <option value="all">All</option>
+            <option value="vendor" {{ request('pay_to') === 'vendor' ? 'selected' : '' }}>Vendor</option>
+            <option value="other" {{ request('pay_to') === 'other' ? 'selected' : '' }}>Other</option>
           </x-select-input>
         </div>
 

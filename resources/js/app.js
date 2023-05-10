@@ -4,6 +4,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import flatpickr from 'flatpickr';
 import 'choices.js/public/assets/styles/choices.min.css';
 import Choices from 'choices.js';
+import { forEach } from 'lodash';
 
 
 
@@ -13,10 +14,10 @@ flatpickr('.happydate', {
   dateFormat: "d/m/Y",
 });
 
-const happyselect = document.querySelector('.happyselect');
+const happyselect = document.querySelectorAll('.happyselect');
 if(happyselect){
-  const choices = new Choices(happyselect, {
-
+  happyselect.forEach(happychoice => {
+    new Choices(happychoice, {});
   });
 }
 

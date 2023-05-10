@@ -93,7 +93,8 @@ class BankingController extends Controller
      */
     public function show(Banking $banking)
     {
-        return view('banking.show', compact('banking'));
+        $balance = Banking::AccountBalance($banking->id);
+        return view('banking.show', compact('banking', 'balance'));
     }
 
     /**

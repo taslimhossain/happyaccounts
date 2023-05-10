@@ -25,13 +25,13 @@
                 <h4 class="font-semibold text-gray-600 dark:text-gray-300"> Account No</h4>
                 <p class="text-gray-600 dark:text-gray-400">{{ $banking->account_number }}</p>
               </div>
-              <div class="flex flex-col">
+              {{-- <div class="flex flex-col">
                 <h4 class="font-semibold text-gray-600 dark:text-gray-300"> Initial Balance </h4>
-                <p class="text-gray-600 dark:text-gray-400">{{ $banking->initial_balance }}</p>
-              </div>
+                <p class="text-gray-600 dark:text-gray-400">{{ formatTaka($banking->initial_balance) }}</p>
+              </div> --}}
               <div class="flex flex-col">
                 <h4 class="font-semibold text-gray-600 dark:text-gray-300"> Current Balance </h4>
-                <p class="text-gray-600 dark:text-gray-400">{{ $banking->initial_balance }}</p>
+                <p class="text-gray-600 dark:text-gray-400">{{ formatTaka($balance); }}</p>
               </div>
           </div>
 

@@ -62,6 +62,7 @@ class VendorController extends Controller
             }
         }
         catch(\Exception $e){
+            dd($e);
             return to_route('vendor.create')->with(['status' => false, 'message' => 'Sorry something wrong, please try to create vendor account again'])->withInput();
         }
     }
