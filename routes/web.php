@@ -101,7 +101,7 @@ Route::middleware('auth')->group(function () {
         Route::get('report/staff-transaction', [ReportController::class, 'staffTransaction'])->name('report.staff-transaction');
 
         Route::get('transaction/{uuid}', [DetailsController::class, 'details_transaction'])->name('transaction-details');
-        Route::get('search-transaction', [DetailsController::class, 'details_transaction'])->name('transaction-search');
+        Route::get('search-transaction', [DetailsController::class, 'search_transaction'])->name('transaction-search');
     });
 
 

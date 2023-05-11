@@ -13,7 +13,7 @@
             <div class="grid grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
               <div class="col-span-12 sm:col-span-4">
                 <x-input-label for="account" :value="__('Account')" />
-                <x-select-input name="account" required>
+                <x-select-input name="account" class="happyselect" required>
                   <option>Select account</option>
                   @foreach($bankings as $account)
                   <option value="{{ $account->id }}" {{ old('account') != $account->id ?: 'selected' }}>{{ $account->bank_name }}</option>
@@ -56,7 +56,7 @@
                 </x-textarea-input>
               </div>
               <input type="hidden" name="project_id" value="{{ $project->id }}">
-              <input type="hidden" name="transaction_type" value="{{ \App\Helpers\Constant::TRANSACTIONS['pay_to_vendor'] }}">
+              <input type="hidden" name="transaction_type" value="{{ \App\Helpers\Constant::TRANSACTIONS['project_other_expenses'] }}">
             </div>
             <x-happy-button type="submit" class="">
               {{ __('Save now') }}

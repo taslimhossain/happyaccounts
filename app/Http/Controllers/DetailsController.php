@@ -12,16 +12,9 @@ use Illuminate\Http\Request;
 class DetailsController extends Controller
 {
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function details_transaction(Request $request)
+
+    public function details_transaction_view( $transaction_id = 0)
     {
-
-        $transaction_id = $request->get('transaction_id');
-
         $global_transaction  = GlobalTransaction::where('uuid', $transaction_id )->first();
         $bank_transaction    = BankTransaction::with('bankName')->where('global_transaction_id', $global_transaction->id)->first();
         $client_transaction  = ClientTransaction::with('bankName','projectName', 'clientName')->where('global_transaction_id', $global_transaction->id)->first();
@@ -34,12 +27,27 @@ class DetailsController extends Controller
         echo "<pre>";
         print_r( $details );
         echo "</pre>";
+    }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function details_transaction($uuid)
+    {
+        return $this->details_transaction_view( $uuid );
+    }
 
-        // return $totalClient    = Client::count('id');
-        // $totalVendor    = Vendor::count('id');
-        // $currentBalance = BankTransaction::selectRaw('SUM(credit_amount) - SUM(debit_amount) as current_balance')->first()->current_balance;
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search_transaction(Request $request)
+    {
+        return $this->details_transaction_view( $request->get('transaction_id', 0) );
+        
     }
 
 

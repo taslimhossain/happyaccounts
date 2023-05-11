@@ -301,17 +301,11 @@ class VendorTransactionController extends Controller
             $project_transaction->banking_id            = intval($request->get('account'));
             $project_transaction->expenses_id           = intval($request->get('expenses_cateogry'));
 
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['return_from_vendor']){
-                $project_transaction->debit_amount          = 0;
-                $project_transaction->credit_amount = intval($request->get('amount'));
-                $project_transaction->trans_type  = 'credit';
-            }
-
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['pay_to_vendor']){
-                $project_transaction->debit_amount  = intval($request->get('amount'));
-                $project_transaction->credit_amount = 0;
-                $project_transaction->trans_type  = 'debit';
-            }
+            $project_transaction->debit_amount  = intval($request->get('amount'));
+            $project_transaction->credit_amount = 0;
+            $project_transaction->trans_type  = 'debit';
+            $project_transaction->expenses_for  = 'other';
+            
 
             try{
                 if($project_transaction->save()){
@@ -342,17 +336,9 @@ class VendorTransactionController extends Controller
             $bank_transaction->title                 = $request->get('transaction_type');
             $bank_transaction->particulars           = isset(Constant::getTransactions()[$request->get('transaction_type')]) ? Constant::getTransactions()[$request->get('transaction_type')] : 'Bank transaction dev mistake';
 
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['return_from_vendor']){
-                $bank_transaction->debit_amount  = 0;
-                $bank_transaction->credit_amount = intval($request->get('amount'));
-                $bank_transaction->trans_type  = 'credit';
-            }
-
-            if(intval($request->get('transaction_type')) === Constant::TRANSACTIONS['pay_to_vendor']){
-                $bank_transaction->debit_amount  = intval($request->get('amount'));
-                $bank_transaction->credit_amount = 0;
-                $bank_transaction->trans_type  = 'debit';
-            }
+            $bank_transaction->debit_amount  = intval($request->get('amount'));
+            $bank_transaction->credit_amount = 0;
+            $bank_transaction->trans_type  = 'debit';
 
             $bank_transaction->banking_id = $request->get('account');
             $bank_transaction->project_id = intval($request->get('project_id'));

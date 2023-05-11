@@ -39,7 +39,7 @@ class StoreOtherTransactionRequest extends FormRequest
             'project_id'        => ['required','numeric','exists:projects,id'],
             'account'           => ['required','numeric','exists:bankings,id'],
             'expenses_cateogry' => ['required','numeric','exists:expenses_categories,id'],
-            'transaction_type'  => ['required', 'numeric','min:1','max:1'],
+            'transaction_type'  => ['required', 'numeric','min:10','max:10'],
             'amount'            => ['required', 'numeric','min:10'],
         ];
     }
