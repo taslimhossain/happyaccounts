@@ -7,15 +7,24 @@
     </x-slot>
 
 
-    <div>
+    <div class="bg-white p-5 mt-2">
       <div class="px-4 sm:px-0 mt-4">
-        <h3 class="text-base font-semibold leading-7 text-gray-900">#{{ $global_transaction->uuid }}</h3>
+        <h3 class="text-base font-semibold leading-7 text-gray-900">ID : #{{ $global_transaction->uuid }}</h3>
         <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Date: {{ $global_transaction->trans_date }}</p>
       </div>
       <div class="mt-6 border-t border-gray-100">
         <dl class="divide-y divide-gray-100">
+          <div class="px-2 py-2 sm:grid sm:grid-cols-0 sm:gap-0 sm:px-0">
+            
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> Date Enter User Name:  </dd>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> Project Name :  </dd>
+          </div>
           <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt class="text-sm font-medium leading-6 text-gray-900">Amount : {{ formatTaka($global_transaction->amount) }}/-</dt>
+          </div>
+          <div class="px-2 py-2 sm:grid sm:grid-cols-0 sm:gap-0 sm:px-0">
+            <dt class="font-bold leading-6 text-base text-gray-900">Particulars:  </dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> All inifomation dynamic </dd>
           </div>
           <div class="px-2 py-2 sm:grid sm:grid-cols-0 sm:gap-0 sm:px-0">
             <dt class="font-bold leading-6 text-base text-gray-900">Bank</dt>
