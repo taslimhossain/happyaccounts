@@ -15,18 +15,17 @@ class DetailsController extends Controller
 
     public function details_transaction_view( $transaction_id = 0)
     {
-        $global_transaction  = GlobalTransaction::where('uuid', $transaction_id )->first();
-        $bank_transaction    = BankTransaction::with('bankName')->where('global_transaction_id', $global_transaction->id)->first();
-        $client_transaction  = ClientTransaction::with('bankName','projectName', 'clientName')->where('global_transaction_id', $global_transaction->id)->first();
-        $office_transaction  = OfficeTransaction::where('global_transaction_id', $global_transaction->id)->first();
-        $vendor_transaction  = VendorTransaction::with('projectName', 'vendorName', 'projectTransaction')->where('global_transaction_id', $global_transaction->id)->first();
-        $project_transaction = ProjectTransaction::with('expensesName', 'bankName', 'projectName', 'vendorName', 'clientName', 'projectTransaction')->where('global_transaction_id', $global_transaction->id)->first();
+        $global_transaction  = GlobalTransaction::with('userInfo')->where('uuid', $transaction_id )->first();
+        $bank_transaction    = BankTransaction::with('bankName')->where('global_transaction_id', $global_transaction->id)->get();
+
+        $client_transaction  = ClientTransaction::with('clientName')->where('global_transaction_id', $global_transaction->id)->first();
+        $office_transaction  = OfficeTransaction::with('expensesName', 'getStaff')->where('global_transaction_id', $global_transaction->id)->first();
+        $vendor_transaction  = VendorTransaction::with('vendorName')->where('global_transaction_id', $global_transaction->id)->first();
+        $project_transaction = ProjectTransaction::with('expensesName', 'projectName')->where('global_transaction_id', $global_transaction->id)->first();
         
         //return compact('global_transaction','bank_transaction', 'client_transaction', 'office_transaction', 'vendor_transaction', 'project_transaction');
 
-         return view('details', compact('global_transaction','bank_transaction', 'client_transaction', 'office_transaction', 'vendor_transaction', 'project_transaction'));
-
-
+        return view('details', compact('global_transaction','bank_transaction', 'client_transaction', 'office_transaction', 'vendor_transaction', 'project_transaction'));
     }
 
     /**

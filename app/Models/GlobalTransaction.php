@@ -20,4 +20,12 @@ class GlobalTransaction extends Model
         $this->attributes['trans_date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
     }
 
+        /**
+     * Get the expenses name .
+     */
+    public function userInfo()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
 }

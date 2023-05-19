@@ -377,6 +377,7 @@ class BankingController extends Controller
             $bank_transaction->user_id    = $request->get('user_id');
             $bank_transaction->trans_date = $request->get('trans_date');
             $bank_transaction->note       = $request->get('note');
+            $bank_transaction->trans_type  = 'debit';
 
             try{
                 $bank_transaction->save();
@@ -393,7 +394,7 @@ class BankingController extends Controller
 
             // End From Bank Transaction
 
-            // Start From Bank Transaction
+            // Start To Bank Transaction
             do {
                 $tobankTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
             } while (BankTransaction::where('uuid', $tobankTransaction_uuid)->exists());
@@ -410,6 +411,7 @@ class BankingController extends Controller
             $tobank_transaction->user_id    = $request->get('user_id');
             $tobank_transaction->trans_date = $request->get('trans_date');
             $tobank_transaction->note       = $request->get('note');
+            $bank_transaction->trans_type  = 'credit';
 
             try{
                 $tobank_transaction->save();
@@ -427,7 +429,7 @@ class BankingController extends Controller
                 return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong in receiver account, please try to create transfer transaction again'])->withInput();
             }
 
-            // End From Bank Transaction
+            // End to Bank Transaction
 
             DB::commit();
             return to_route('banking.transfer-transaction.create')->with(['message' => 'Success! Your money transfer transaction has been created.']);

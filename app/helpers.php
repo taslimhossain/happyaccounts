@@ -9,7 +9,7 @@ if(!function_exists('is_admin')){
 if(!function_exists('formatTaka')){
     function formatTaka($number): string
     {
-        return number_format($number, 2, '.', '');
+        return number_format($number, 0, '.', '').'/-';
     }
 }
 if(!function_exists('get_days_left')){

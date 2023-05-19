@@ -78,4 +78,13 @@ class OfficeTransaction extends Model
         ->selectRaw('SUM(credit_amount) OVER (ORDER BY id) AS total_credit');
     }
 
+    /**
+     * Get the expenses name .
+     */
+    public function expensesName()
+    {
+        return $this->belongsTo(Expenses_categories::class, 'expenses_id', 'id');
+    }
+
+
 }
