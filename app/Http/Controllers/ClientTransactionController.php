@@ -51,7 +51,7 @@ class ClientTransactionController extends Controller
             $global_transaction->trans_date = $request->get('trans_date');
             $global_transaction->user_id    = $request->get('user_id');
             $global_transaction->client_id  = $request->get('client_id');
-            $global_transaction->project_id            = intval($request->get('project_id'));
+            $global_transaction->project_id = intval($request->get('project_id'));
 
             try{
                 if($global_transaction->save()){

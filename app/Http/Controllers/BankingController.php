@@ -77,7 +77,84 @@ class BankingController extends Controller
 
         try{
             if($banking->save()){
-                return to_route('banking.index')->with(['message' => 'Bank account add successfully']);
+                //start success create
+
+                // Get the current user id
+                $user_id = Auth::id();
+                $request->merge(['user_id' => $user_id]);
+
+                // Start a database transaction
+                DB::beginTransaction();
+                try {
+                    // Start Global Transaction
+                    do {
+                        $globalTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
+                    } while (GlobalTransaction::where('uuid', $globalTransaction_uuid)->exists());
+
+                    $global_transaction             = new GlobalTransaction();
+                    $global_transaction->uuid       = $globalTransaction_uuid;
+                    $global_transaction->title      = Constant::TRANSACTIONS['bank_deposit'];
+                    $global_transaction->banking_id = $banking->id;
+                    $global_transaction->amount     = intval($request->get('initial_balance'));
+                    $global_transaction->user_id    = $request->get('user_id');
+                    try{
+                        if($global_transaction->save()){
+                            $global_transaction_id = $global_transaction->id;
+                        }
+                    } catch(\Exception $e){
+                        DB::rollBack();
+                        if(isset($global_transaction)){
+                            $global_transaction->delete();
+                        }
+                        return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong in new bank account transaction, please try to create new bank account transaction again'])->withInput();
+                    }
+
+                    // End Global Transaction
+
+                    // Start Global Transaction
+                    do {
+                        $bankTransaction_uuid = Str::substr(Str::uuid()->getInteger(), 0, 15);
+                    } while (BankTransaction::where('uuid', $bankTransaction_uuid)->exists());
+
+                    $bank_transaction                        = new BankTransaction();
+                    $bank_transaction->uuid                  = $bankTransaction_uuid;
+                    $bank_transaction->global_transaction_id = $global_transaction_id;
+                    $bank_transaction->title                 = Constant::TRANSACTIONS['bank_deposit'];
+                    $bank_transaction->particulars           = Constant::getTransactions()[Constant::TRANSACTIONS['bank_deposit']];
+                    
+                    $bank_transaction->debit_amount          = 0;
+                    $bank_transaction->credit_amount = intval($request->get('initial_balance'));
+                    $bank_transaction->banking_id = $banking->id;
+                    $bank_transaction->user_id    = $request->get('user_id');
+
+                    try{
+                        $bank_transaction->save();
+                    } catch(\Exception $e){
+                        DB::rollBack();
+                        if(isset($global_transaction)){
+                            $global_transaction->delete();
+                        }
+                        if(isset($bank_transaction)){
+                            $bank_transaction->delete();
+                        }
+                        return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong in receiver account, please try to create transfer transaction again'])->withInput();
+                    }
+
+                    // End From Bank Transaction
+                    DB::commit();
+                    return to_route('banking.index')->with(['message' => 'Bank account add successfully']);
+                    // End Global Transaction
+                } catch (Exception $e) {
+                    DB::rollBack();
+                    if(isset($global_transaction)){
+                        $global_transaction->delete();
+                    }
+                    if(isset($bank_transaction)){
+                        $bank_transaction->delete();
+                    }
+                    return redirect()->back()->with(['status' => false, 'message' => 'Sorry something wrong, please try to create transfer transaction again'])->withInput();
+                }
+                //end success create
             }
         }
         catch(\Exception $e){

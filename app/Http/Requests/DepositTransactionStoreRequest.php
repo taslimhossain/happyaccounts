@@ -25,8 +25,8 @@ class DepositTransactionStoreRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'account'       => ['required','numeric','exists:bankings,id'],
-            'amount' => ['required', 'numeric','min:10'],
+            'account' => ['required','numeric','exists:bankings,id'],
+            'amount'  => ['required', 'numeric','min:10'],
         ];
 
         if ($this->input('transaction_type') == \App\Helpers\Constant::TRANSACTIONS['bank_deposit']) {

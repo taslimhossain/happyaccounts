@@ -134,7 +134,9 @@
             <dt class="font-bold leading-6 text-base text-gray-900">Project</dt>
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> <span class="font-semibold">Particulars:</span> {{ $project_transaction->particulars }} </dd>
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> <span class="font-semibold">Project Name:</span> {{ $project_transaction->projectName->project_title }} </dd>
+            @if($project_transaction->expensesName)
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> <span class="font-semibold">Expenses cateogry:</span> {{ $project_transaction->expensesName->name }}</dd>
+            @endif
             {{-- <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> <span class="font-semibold">Amount:</span> {{ formatTaka($global_transaction->amount) }} </dd>
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> <span class="font-semibold">Date:</span> {{ $bank_transaction[0]->trans_date }}</dd> --}}
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> <span class="font-semibold">Reference:</span> {{ $project_transaction->reference }}</dd>
@@ -146,7 +148,9 @@
           @if($office_transaction && $office_transaction->is_salary != 'yes' )
           <div class="px-2 py-2 sm:grid sm:grid-cols-0 sm:gap-0 sm:px-0">
             <dt class="font-bold leading-6 text-base text-gray-900">Office</dt>
+            @if($office_transaction->expensesName)
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> <span class="font-semibold">Expenses cateogry:</span> {{ $office_transaction->expensesName->name }} </dd>
+            @endif
             {{-- <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> <span class="font-semibold">Amount:</span> {{ formatTaka($global_transaction->amount) }} </dd>
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> <span class="font-semibold">Date:</span> {{ $bank_transaction[0]->trans_date }}</dd> --}}
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> <span class="font-semibold">Reference:</span> {{ $office_transaction->reference }}</dd>

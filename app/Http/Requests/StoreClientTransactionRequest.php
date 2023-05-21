@@ -35,13 +35,24 @@ class StoreClientTransactionRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'project_id'       => ['required','numeric','exists:projects,id'],
             'client_id'       => ['required','numeric','exists:clients,id'],
             'account'       => ['required','numeric','exists:bankings,id'],
             'transaction_type' => ['required', 'numeric','min:1'],
             'amount' => ['required', 'numeric','min:10'],
         ];
+
+        if ($this->input('transaction_type') == \App\Helpers\Constant::TRANSACTIONS['return_to_client']) {
+            $rules['amount'] = ['required', 'numeric','min:10','max:'.$this->getBalance($this->input('account'))];
+        }
+
+        return $rules;
+
+    }
+
+    public function getBalance($bank_id){
+        return \App\Models\Banking::AccountBalance($bank_id);
     }
 
     /**
@@ -70,7 +81,8 @@ class StoreClientTransactionRequest extends FormRequest
 
             'amount.required' => __('The :attribute have to write', ['attribute' => __('Amount')]),
             'amount.numeric'  => __(':attribute field must be a number', ['attribute' => __('Amount')]),
-            'amount.min'      => __('The :attribute have to be greater than or equal to  10', ['attribute' => __('Amount')]),
+            'amount.min'      => __(':attribute have to be greater than or equal to  :min', ['attribute' => __('Amount')]),
+            'amount.max'      => __('The :attribute must be less than or equal to :max taka, Your current balance is :max taka', ['attribute' => __('Amount')]),
         ];
     }
 
